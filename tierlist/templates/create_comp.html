@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="content-section">
+		<form method="POST" action="">
+			{{ form.hidden_tag() }} <!-- FlaskForm.hidden_tag() uses the app's secret key to protect from attacks. Absolutely necessary! -->
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">{{ legend }}</legend>
+				<div class="form-group mb-2">
+					{{ form.carries.label(class="form-control-label") }}
+
+					{% if form.carries.errors %}
+						{{ form.carries(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.carries.errors%}
+								<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.carries(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group mb-2">
+					{{ form.synergies.label(class="form-control-label") }}
+
+					{% if form.synergies.errors %}
+						{{ form.synergies(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.synergies.errors%}
+								<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.synergies(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group mb-2">
+					{{ form.lolchess.label(class="form-control-label") }}
+
+					{% if form.lolchess.errors %}
+						{{ form.lolchess(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.lolchess.errors%}
+								<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.lolchess(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group mb-2">
+					{{ form.chosen.label(class="form-control-label") }}
+
+					{% if form.chosen.errors %}
+						{{ form.chosen(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.chosen.errors%}
+								<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.chosen(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+			</fieldset>
+			<div class="form-group mb-2">
+				{{ form.submit(class="btn btn-outline-info") }}
+			</div>
+		</form>
+	</div>
+{% endblock content %}

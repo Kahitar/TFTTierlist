@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Tierlist</h1>
+    <table class="table table-hover">
+    <tbody>
+        <tr>
+            <th>RANKING</th>
+            <th>CARRIES</th>
+            <th>CARRIES</th>
+            <th>ITEMS & POSITIONING</th>
+            <th>CHOSEN</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% set current_tier = 1 %}
+    	{% for comp in comps %}
+            <tr>
+                <td class="tier-{{ comp.tier }}">TIER {{ comp.tier }}.{{ comp.sub_tier}}</td>
+                <td>{{ comp.carries }}</td>
+                <td>{{ comp.synergies }}</td>
+                <td><a href="{{ comp.lolchess }}">Link</a></td>
+                <td>{{ comp.chosen }}</td>
+                <td><a class="btn btn-info" href="{{ url_for('comps.new_comp') }}">Edit</a></td>
+                <td><button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#deleteModal">Delete</button></td>
+            </tr>
+
+            <!-- Modal from https://getbootstrap.com/docs/4.3/components/modal/#live-demo -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Comp?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <form action="{{ url_for('comps.delete_comp', comp_id=comp.id) }}" method="POST">
+                        <input class="btn btn-danger" type="submit" value="Delete">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+    	{% endfor %}
+    </tbody>
+    </table>
+
+
+{% endblock content %}
