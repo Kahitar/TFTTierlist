@@ -4,6 +4,7 @@ from flask_login import current_user, login_required
 from tierlist import db
 from tierlist.models import Comp, Tierlist
 from tierlist.comps.forms import CompForm
+from tierlist.tierlist.utils import update_tierlist
 
 comps = Blueprint('comps', __name__)
 
@@ -22,37 +23,36 @@ def new_comp():
                     tierlist=Tierlist.query.first())
         db.session.add(comp)
         db.session.commit()
+        update_tierlist(list_id=Tierlist.query.first().id)
         flash("The comp has been created.", "success")
         return redirect(url_for('main.home'))
     return render_template('create_comp.html', title='New Comp',
                            form=form, legend="New Comp")
 
 
-@comps.route("/comp/<int:post_id>")
-def comp(post_id):
-    comp = Post.query.get_or_404(post_id)
-    return render_template("comp.html", title=comp.title, comp=comp)
-
-
-@comps.route("/comp/<int:post_id>/update", methods=["GET", "POST"])
+@comps.route("/comp/<int:comp_id>/update", methods=["GET", "POST"])
 @login_required
-def update_post(post_id):
-    comp = Post.query.get_or_404(post_id)
-    if comp.author != current_user:
+def update_comp(comp_id):
+    comp = Comp.query.get_or_404(comp_id)
+    if not current_user.is_admin:
         abort(403)
 
-    form = PostForm()
+    form = CompForm()
     if form.validate_on_submit():
-        comp.title = form.title.data
-        comp.content = form.content.data
+        comp.carries = form.carries.data
+        comp.synergies = form.synergies.data
+        comp.lolchess = form.lolchess.data
+        comp.chosen = form.chosen.data
         db.session.commit()
-        flash("Your comp has been updated!", "success")
-        return redirect(url_for("comps.comp", post_id=comp.id))
+        flash("The comp has been updated.", "success")
+        return redirect(url_for("main.home"))
     elif request.method == "GET":
-        form.title.data = comp.title
-        form.content.data = comp.content
-    return render_template('create_post.html', title='Update Post',
-                           form=form, legend="Update Post")
+        form.carries.data = comp.carries
+        form.synergies.data = comp.synergies
+        form.lolchess.data = comp.lolchess
+        form.chosen.data = comp.chosen
+    return render_template('create_comp.html', title='Update Comp',
+                           form=form, legend="Update Comp")
 
 
 @comps.route("/comp/<int:comp_id>/delete", methods=["POST"])
@@ -64,5 +64,5 @@ def delete_comp(comp_id):
 
     db.session.delete(comp)
     db.session.commit()
-    flash("Your comp has been deleted!", "success")
+    flash("The comp has been deleted.", "success")
     return redirect(url_for('main.home'))

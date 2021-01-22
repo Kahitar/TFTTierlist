@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False,
                            default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
     # One-to-many relationship between User and List
     tierlists = db.relationship('Tierlist', backref='author', lazy=True)
@@ -36,7 +37,7 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}', 'admin:{self.is_admin}', '{self.image_file}')"
 
 
 class Tierlist(db.Model):
