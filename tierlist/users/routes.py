@@ -22,7 +22,7 @@ def register():
         hashed_password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
         user = User(username=form.username.data,
-                    email=form.email.data, password=hashed_password)
+                    email=form.email.data.lower(), password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash(f'Your account has been created! You are now able to log in.', 'success')
@@ -39,13 +39,20 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('main.home'))
-        else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
+        user = User.query.filter_by(
+            email=form.email.data.lower()).first()
+        if user:
+            try:
+                password_match = bcrypt.check_password_hash(
+                    user.password, form.password.data)
+            except ValueError:
+                password_match = False
+            if password_match:
+                login_user(user, remember=form.remember.data)
+                next_page = request.args.get('next')
+                return redirect(next_page) if next_page else redirect(url_for('main.home'))
+
+        flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
@@ -64,7 +71,7 @@ def account():
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.username = form.username.data
-        current_user.email = form.email.data
+        current_user.email = form.email.data.lower()
         db.session.commit()
         flash("Your account has been updated!", "success")
         return redirect(url_for('users.account'))  # Post-Get-Redirect-Pattern
@@ -84,7 +91,7 @@ def reset_request():
 
     form = RequestResetForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data.lower()).first()
         send_reset_email(user)
         flash('An email has been sent with instructions to reset your password.', 'info')
         return redirect(url_for('users.login'))
