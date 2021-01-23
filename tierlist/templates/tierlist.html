@@ -25,13 +25,13 @@
                 {% if current_user.is_authenticated and current_user.is_admin %}
                     <td>
                         <a class="btn btn-info btn-sm" href="{{ url_for('comps.update_comp', comp_id=comp.id) }}">Edit</a>
-                        <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                        <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteModal{{ comp.id }}">Delete</button>
                     </td>
                 {% endif %}
             </tr>
 
             <!-- Modal from https://getbootstrap.com/docs/4.3/components/modal/#live-demo -->
-            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal fade" id="deleteModal{{ comp.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
