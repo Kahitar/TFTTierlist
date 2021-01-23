@@ -42,13 +42,15 @@ class User(db.Model, UserMixin):
 
 class Tierlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    last_updated = db.Column(db.DateTime, unique=True,
+                             nullable=True, default=datetime.utcnow)
 
     # Relationships
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     comps = db.relationship('Comp', backref='tierlist', lazy=True)
 
     def __repr__(self):
-        return f"Tierlist('Author: {self.author}')"
+        return f"Tierlist('Author: {self.author}', 'Last update: {self.last_updated}')"
 
 
 class Comp(db.Model):
@@ -65,4 +67,4 @@ class Comp(db.Model):
         'tierlist.id'), nullable=False)
 
     def __repr__(self):
-        return f"Comp('{self.carries}', 'Tier: {self.tier}.{self.sub_tier}')"
+        return f"Comp('ID: {self.id}', 'Carries: {self.carries}', 'Tier: {self.tier}.{self.sub_tier}')"

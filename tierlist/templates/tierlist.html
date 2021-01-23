@@ -1,14 +1,15 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Tierlist</h1>
+    <h1>Sologesang - Tierlist</h1>
+    Last update: {{ tierlist.last_updated.strftime('%d.%m.%Y') }}
     <table class="table table-hover table-striped table-sm">
     <tbody>
         <tr class="table-active">
             <th>RANKING</th>
             <th>CARRIES</th>
             <th>SYNERGIES</th>
-            <th>ITEMS & POSITIONING</th>
             <th>CHOSEN</th>
+            <th>ITEMS & POSITIONING</th>
             {% if current_user.is_authenticated and current_user.is_admin %}
                 <th>Admin Controls</th>
             {% endif %}
@@ -16,15 +17,15 @@
         {% set current_tier = 1 %}
     	{% for comp in comps %}
             <tr>
-                <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}.{{ comp.sub_tier}}</td>
+                <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}</td>
                 <td>{{ comp.carries }}</td>
                 <td>{{ comp.synergies }}</td>
-                <td><a href="{{ comp.lolchess }}" target="_blank">Link</a></td>
                 <td>{{ comp.chosen }}</td>
+                <td><a href="{{ comp.lolchess }}" target="_blank">Link</a></td>
 
                 {% if current_user.is_authenticated and current_user.is_admin %}
                     <td>
-                        <a class="btn btn-info btn-sm" href="{{ url_for('comps.update_comp', comp_id=comp.id) }}">Edit</a>
+                        <a class="btn btn-info btn-sm ml-2" href="{{ url_for('comps.update_comp', comp_id=comp.id) }}">Edit</a>
                         <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteModal{{ comp.id }}">Delete</button>
                     </td>
                 {% endif %}
@@ -35,7 +36,7 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete Comp?</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Comp? (Carries: {{ comp.carries }})</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>

@@ -1,5 +1,5 @@
 from flask import render_template, request, Blueprint
-from tierlist.models import Comp
+from tierlist.models import Comp, Tierlist
 
 
 main = Blueprint('main', __name__)
@@ -9,4 +9,5 @@ main = Blueprint('main', __name__)
 @main.route("/home")
 def home():
     comps = Comp.query.order_by(Comp.tier.asc(), Comp.sub_tier.asc()).all()
-    return render_template('tierlist.html', comps=comps)
+    tierlist = Tierlist.query.first()
+    return render_template('tierlist.html', comps=comps, tierlist=tierlist, title="Sologesang")
