@@ -11,22 +11,40 @@
             <th>CHOSEN</th>
             <th>ITEMS & POSITIONING</th>
             {% if current_user.is_authenticated and current_user.is_admin %}
-                <th>Admin Controls</th>
+                <th>Tier Up/Down</th>
+                <th>Row Up/Down</th>
+                <th>Comp</th>
             {% endif %}
         </tr>
         {% set current_tier = 1 %}
     	{% for comp in comps %}
             <tr>
-                <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}</td>
-                <td>{{ comp.carries }}</td>
+                <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}.{{ comp.sub_tier }}</td>
+                <td class="ml-2">{{ comp.carries }}</td>
                 <td>{{ comp.synergies }}</td>
                 <td>{{ comp.chosen }}</td>
                 <td><a href="{{ comp.lolchess }}" target="_blank">Link</a></td>
 
                 {% if current_user.is_authenticated and current_user.is_admin %}
                     <td>
-                        <a class="btn btn-info btn-sm ml-2" href="{{ url_for('comps.update_comp', comp_id=comp.id) }}">Edit</a>
-                        <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteModal{{ comp.id }}">Delete</button>
+                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-up') }}">
+                            <img src="{{ url_for('static', filename='arrow-up-tier.ico') }}" alt="Tier up" class="">
+                        </a>
+                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-down') }}">
+                            <img src="{{ url_for('static', filename='arrow-down-tier.ico') }}" alt="Tier down" class="">
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='up') }}">
+                            <img src="{{ url_for('static', filename='arrow-up-sub-tier.ico') }}" alt="Sub Tier up" class="">
+                        </a>
+                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='down') }}">
+                            <img src="{{ url_for('static', filename='arrow-down-sub-tier.ico') }}" alt="Sub Tier down" class="">
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.update_comp', comp_id=comp.id) }}">Edit</a>
+                        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal{{ comp.id }}">Delete</button>
                     </td>
                 {% endif %}
             </tr>

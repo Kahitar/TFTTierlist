@@ -44,6 +44,7 @@ def update_comp(comp_id):
         comp.lolchess = form.lolchess.data
         comp.chosen = form.chosen.data
         db.session.commit()
+        update_tierlist(list_id=Tierlist.query.first().id)
         flash("The comp has been updated.", "success")
         return redirect(url_for("main.home"))
     elif request.method == "GET":
@@ -55,6 +56,38 @@ def update_comp(comp_id):
                            form=form, legend="Update Comp")
 
 
+@comps.route("/comp/<int:comp_id>/<string:direction>/move")
+def move_comp(comp_id, direction):
+    comp = Comp.query.get_or_404(comp_id)
+
+    # TODO: Calculate
+    MAX_SUBTIER = 3
+
+    if direction == 'tier-up':
+        comp.tier -= 1
+    if direction == 'tier-down':
+        comp.tier += 1
+    if direction == 'up':
+        comp.sub_tier -= 1
+    if direction == 'down':
+        comp.sub_tier += 1
+
+    if comp.sub_tier <= 0 and comp.tier > 1:
+        comp.tier -= 1
+        comp.sub_tier = MAX_SUBTIER + 1
+    elif comp.sub_tier >= MAX_SUBTIER + 1:
+        comp.tier += 1
+        comp.sub_tier = 1
+    elif comp.sub_tier <= 0:
+        comp.sub_tier = 1
+    if comp.tier <= 0:
+        comp.tier = 1
+
+    db.session.commit()
+
+    return redirect(url_for('main.home'))
+
+
 @comps.route("/comp/<int:comp_id>/delete", methods=["POST"])
 @login_required
 def delete_comp(comp_id):
@@ -64,5 +97,6 @@ def delete_comp(comp_id):
 
     db.session.delete(comp)
     db.session.commit()
+    update_tierlist(list_id=Tierlist.query.first().id)
     flash("The comp has been deleted.", "success")
     return redirect(url_for('main.home'))

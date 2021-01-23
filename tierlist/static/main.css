@@ -83,19 +83,27 @@ a.article-title:hover {
   background-color: #6AA84F !important;
 }
 
+.table tbody tr > td.tier-2 {
+  background-color: #93C47D !important;
+}
+
+.table tbody tr > td.tier-3 {
+  background-color: #F1C232 !important;
+}
+
 /*.tier-1 {
-  background-color: #6AA84F;
+  background-color: #6AA84F !important;
+}
+
+.tier-2 {
+  background-color: #93C47D !important;
+}
+
+.tier-3 {
+  background-color: #F1C232 !important;
 }*/
 
-.tier-2 {
-  background-color: #93C47D;
-}
-
-.tier-2 {
-  background-color: #F1C232;
-}
-
-tr td {
+/*tr td {
   padding: 0 !important;
   margin: 0 !important;
-}
+}*/
