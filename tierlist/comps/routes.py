@@ -5,7 +5,7 @@ from tierlist import db
 from tierlist.models import Comp, Tierlist
 from tierlist.comps import utils
 from tierlist.comps.forms import CompForm
-from tierlist.tierlist.utils import update_tierlist
+from tierlist.tierlist.utils import update_tierlist, fix_subtier_gaps
 
 comps = Blueprint('comps', __name__)
 
@@ -71,8 +71,8 @@ def move_comp(comp_id, direction):
     if direction == 'down':
         utils.sub_tier_down(comp, all_comps)
 
+    fix_subtier_gaps()
     db.session.commit()
-
     return redirect(url_for('main.home'))
 
 

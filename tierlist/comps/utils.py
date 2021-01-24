@@ -1,4 +1,5 @@
 
+
 def get_max_subtier(comps):
     print("Same tier: ", comps)
 
