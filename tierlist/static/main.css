@@ -91,6 +91,14 @@ a.article-title:hover {
   background-color: #F1C232 !important;
 }
 
+.table tbody tr > td.tier-4 {
+  background-color: #FFB121 !important;
+}
+
+.table tbody tr > td.tier-5 {
+  background-color: #FF5132 !important;
+}
+
 /*.tier-1 {
   background-color: #6AA84F !important;
 }

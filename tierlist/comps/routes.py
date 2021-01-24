@@ -56,32 +56,69 @@ def update_comp(comp_id):
                            form=form, legend="Update Comp")
 
 
+def get_max_subtier(comps):
+    print("Same tier: ", comps)
+
+    max_subtier = 0
+    for comp in comps:
+        if comp.sub_tier > max_subtier:
+            max_subtier = comp.sub_tier
+    return max_subtier
+
+
+def get_same_tier_comps(comp, all_comps):
+    same_tier = [c for c in all_comps if c.tier == comp.tier and c is not comp]
+    same_tier.sort(key=lambda c: c.sub_tier)
+    return same_tier
+
+
+def tier_up(comp, all_comps):
+    old_tier_comps = get_same_tier_comps(comp, all_comps)
+    old_sub_tier = comp.sub_tier
+    comp.tier -= 1
+    new_tier_comps = get_same_tier_comps(comp, all_comps)
+
+    # Fix sub-tiers of old tier
+    for c in old_tier_comps:
+        if c.sub_tier > old_sub_tier:
+            c.sub_tier -= 1
+
+    if comp.tier <= 0:
+        tier_down(comp, all_comps)
+    else:
+        max_subtier = get_max_subtier(new_tier_comps)
+        comp.sub_tier = max_subtier + 1
+
+
+def tier_down(comp, all_comps):
+    old_tier_comps = get_same_tier_comps(comp, all_comps)
+    old_sub_tier = comp.sub_tier
+    comp.tier += 1
+    comp.sub_tier = 1
+    new_tier_comps = get_same_tier_comps(comp, all_comps)
+
+    # Fix sub-tiers of old tier
+    for c in old_tier_comps:
+        if c.sub_tier > old_sub_tier:
+            c.sub_tier -= 1
+
+    for c in new_tier_comps:
+        c.sub_tier += 1
+
+
 @comps.route("/comp/<int:comp_id>/<string:direction>/move")
 def move_comp(comp_id, direction):
     comp = Comp.query.get_or_404(comp_id)
-
-    # TODO: Calculate
-    MAX_SUBTIER = 3
+    all_comps = Comp.query.filter_by(tierlist=comp.tierlist).all()
 
     if direction == 'tier-up':
-        comp.tier -= 1
+        tier_up(comp, all_comps)
     if direction == 'tier-down':
-        comp.tier += 1
+        tier_down(comp, all_comps)
     if direction == 'up':
         comp.sub_tier -= 1
     if direction == 'down':
         comp.sub_tier += 1
-
-    if comp.sub_tier <= 0 and comp.tier > 1:
-        comp.tier -= 1
-        comp.sub_tier = MAX_SUBTIER + 1
-    elif comp.sub_tier >= MAX_SUBTIER + 1:
-        comp.tier += 1
-        comp.sub_tier = 1
-    elif comp.sub_tier <= 0:
-        comp.sub_tier = 1
-    if comp.tier <= 0:
-        comp.tier = 1
 
     db.session.commit()
 
