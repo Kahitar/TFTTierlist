@@ -106,6 +106,35 @@ def tier_down(comp, all_comps):
         c.sub_tier += 1
 
 
+def sub_tier_up(comp, all_comps):
+    tier_comps = get_same_tier_comps(comp, all_comps)  # not including comp
+
+    if comp.sub_tier <= 1:
+        tier_up(comp, all_comps)
+    else:
+        comp.sub_tier -= 1
+
+        # Fix comp's sub-tiers
+        for c in tier_comps:
+            if c.sub_tier == comp.sub_tier:
+                c.sub_tier += 1
+
+
+def sub_tier_down(comp, all_comps):
+    tier_comps = get_same_tier_comps(comp, all_comps)  # not including comp
+    max_sub_tier = get_max_subtier(tier_comps)  # not including comp
+
+    if comp.sub_tier > max_sub_tier:
+        tier_down(comp, all_comps)
+    else:
+        comp.sub_tier += 1
+
+        # Fix comp's sub-tiers
+        for c in tier_comps:
+            if c.sub_tier == comp.sub_tier:
+                c.sub_tier -= 1
+
+
 @comps.route("/comp/<int:comp_id>/<string:direction>/move")
 def move_comp(comp_id, direction):
     comp = Comp.query.get_or_404(comp_id)
@@ -116,9 +145,9 @@ def move_comp(comp_id, direction):
     if direction == 'tier-down':
         tier_down(comp, all_comps)
     if direction == 'up':
-        comp.sub_tier -= 1
+        sub_tier_up(comp, all_comps)
     if direction == 'down':
-        comp.sub_tier += 1
+        sub_tier_down(comp, all_comps)
 
     db.session.commit()
 
