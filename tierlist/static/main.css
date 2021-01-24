@@ -92,26 +92,9 @@ a.article-title:hover {
 }
 
 .table tbody tr > td.tier-4 {
-  background-color: #FFB121 !important;
+  background-color: #FF9121 !important;
 }
 
 .table tbody tr > td.tier-5 {
   background-color: #FF5132 !important;
 }
-
-/*.tier-1 {
-  background-color: #6AA84F !important;
-}
-
-.tier-2 {
-  background-color: #93C47D !important;
-}
-
-.tier-3 {
-  background-color: #F1C232 !important;
-}*/
-
-/*tr td {
-  padding: 0 !important;
-  margin: 0 !important;
-}*/

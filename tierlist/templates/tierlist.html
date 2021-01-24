@@ -21,9 +21,9 @@
             <tr>
                 <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}.{{ comp.sub_tier }}</td>
                 <td class="ml-2">{{ comp.carries }}</td>
-                <td>{{ comp.synergies }}</td>
-                <td>{{ comp.chosen }}</td>
-                <td><a href="{{ comp.lolchess }}" target="_blank">Link</a></td>
+                <td class="ml-2">{{ comp.synergies }}</td>
+                <td class="ml-2">{{ comp.chosen }}</td>
+                <td class="ml-2"><a href="{{ comp.lolchess }}" target="_blank">Link</a></td>
 
                 {% if current_user.is_authenticated and current_user.is_admin %}
                     <td>
