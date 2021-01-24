@@ -11,12 +11,11 @@
             <th>CHOSEN</th>
             <th>ITEMS & POSITIONING</th>
             {% if current_user.is_authenticated and current_user.is_admin %}
-                <th>Tier Up/Down</th>
-                <th>Row Up/Down</th>
+                <th class="text-center" colspan="2">Tier Up/Down</th>
+                <th class="text-center" colspan="2">Row Up/Down</th>
                 <th>Comp</th>
             {% endif %}
         </tr>
-        {% set current_tier = 1 %}
     	{% for comp in comps %}
             <tr>
                 <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}.{{ comp.sub_tier }}</td>
@@ -27,20 +26,30 @@
 
                 {% if current_user.is_authenticated and current_user.is_admin %}
                     <td>
-                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-up') }}">
-                            <img src="{{ url_for('static', filename='arrow-up-tier.ico') }}" alt="Tier up" class="">
-                        </a>
+                        {% if comp.tier > 1 or comp.sub_tier > 1 %}
+                            <a class="btn btn-info btn-sm m-1 float-right" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-up') }}">
+                                <img src="{{ url_for('static', filename='arrow-up-tier.ico') }}" alt="Tier up" class="">
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
                         <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-down') }}">
                             <img src="{{ url_for('static', filename='arrow-down-tier.ico') }}" alt="Tier down" class="">
                         </a>
                     </td>
                     <td>
-                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='up') }}">
-                            <img src="{{ url_for('static', filename='arrow-up-sub-tier.ico') }}" alt="Sub Tier up" class="">
-                        </a>
-                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='down') }}">
-                            <img src="{{ url_for('static', filename='arrow-down-sub-tier.ico') }}" alt="Sub Tier down" class="">
-                        </a>
+                        {% if comp.tier > 1 or comp.sub_tier > 1 %}
+                            <a class="btn btn-info btn-sm m-1 float-right" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='up') }}">
+                                <img src="{{ url_for('static', filename='arrow-up-sub-tier.ico') }}" alt="Sub Tier up" class="">
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if comp != comps[-1] %}
+                            <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='down') }}">
+                                <img src="{{ url_for('static', filename='arrow-down-sub-tier.ico') }}" alt="Sub Tier down" class="">
+                            </a>
+                        {% endif %}
                     </td>
                     <td>
                         <a class="btn btn-info btn-sm m-1" href="{{ url_for('comps.update_comp', comp_id=comp.id) }}">Edit</a>
@@ -60,7 +69,7 @@
                     </button>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <form action="{{ url_for('comps.delete_comp', comp_id=comp.id) }}" method="POST">
                         <input class="btn btn-danger" type="submit" value="Delete">
                     </form>
