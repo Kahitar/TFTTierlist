@@ -84,13 +84,13 @@
     </div>
 
     <div class="container ">
-        {% for post in posts.items %}
+        {% for post in posts %}
 
             {% if loop.index % 2 == 1 %}
                 <div class="row">
-                    <div class="col">
+                    <div class="col-6">
             {% else %}
-                    <div class="col">
+                    <div class="col-6">
             {% endif %}
 
             <article class="media content-section">
@@ -102,9 +102,9 @@
                 </div>
                 <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
 
-                {% if post.content|length > 150 %}
+                {% if post.content|length > 200 %}
                     <p class="article-content">
-                        {{ post.content[:150]|safe }}
+                        {{ post.content[:200]|safe }}
                         <a class="text-muted" href="{{ url_for('posts.post', post_id=post.id) }}">[...] Read more...</a>
                     </p>
                 {% else %}
