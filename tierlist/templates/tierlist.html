@@ -104,11 +104,11 @@
 
                 {% if post.content|length > 150 %}
                     <p class="article-content">
-                        {{ post.content[:150] }}
+                        {{ post.content[:150]|safe }}
                         <a class="text-muted" href="{{ url_for('posts.post', post_id=post.id) }}">[...] Read more...</a>
                     </p>
                 {% else %}
-                    <p class="article-content">{{ post.content }}</p>
+                    <p class="article-content">{{ post.content|safe }}</p>
                 {% endif %}
               </div>
             </article>
