@@ -10,7 +10,7 @@
               <small class="text-muted">{{ post.date_posted.strftime('%d.%m.%Y %H:%M') }}</small>
             </div>
             <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content|safe }}</p>
+            <p class="article-content">{{ post.content|safe|urlize(40, true, target="_blank") }}</p>
             {% if post.image_file %}
                 <img src="{{ url_for('static', filename='post_pics/' + post.image_file) }}" class="img-rounded img-fluid"/>
             {% endif %}
