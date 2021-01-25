@@ -19,8 +19,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
-    # One-to-many relationship between User and List
+    # One-to-many relationships
     tierlists = db.relationship('Tierlist', backref='author', lazy=True)
+    posts = db.relationship('Post', backref='author', lazy=True)
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
@@ -68,3 +69,19 @@ class Comp(db.Model):
 
     def __repr__(self):
         return f"Comp('ID: {self.id}', 'Carries: {self.carries}', 'Tier: {self.tier}.{self.sub_tier}')"
+
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False,
+                            default=datetime.utcnow)
+    content = db.Column(db.Text, nullable=False)
+
+    # One-to-many relationship between User and Post
+    #    The 'user' in 'user.id' is lowercase here because SQLAlchemy automatically creates
+    #    an object for the User class, which is named user.
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Post('{self.title}', '{self.date_posted}')"

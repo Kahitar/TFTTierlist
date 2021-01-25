@@ -28,14 +28,15 @@
 				<div class="collapse navbar-collapse" id="navbarToggle">
 					<div class="navbar-nav mr-auto">
 						<a class="nav-item nav-link" href="{{ url_for('main.home')}}">Tierlist</a>
-						{% if current_user.is_authenticated and current_user.is_admin %}
-							<a class="nav-item nav-link" href="{{ url_for('comps.new_comp')}}">Add Comp</a>
-						{% endif %}
 					</div>
 					<!-- Navbar Right Side -->
 					<div class="navbar-nav">
+						{% if current_user.is_authenticated and current_user.is_admin %}
+							<a class="nav-item nav-link" href="{{ url_for('comps.new_comp')}}">Add Comp</a>
+							<a class="nav-item nav-link" href="{{ url_for('posts.new_post')}}">New Post</a>
+						{% endif %}
 						{% if current_user.is_authenticated %}
-							<a class="nav-item nav-link" href="{{ url_for('users.account')}}">{{ current_user.username }}</a>
+							<a class="nav-item nav-link" href="{{ url_for('users.account')}}">Account</a>
 							<a class="nav-item nav-link" href="{{ url_for('users.logout')}}">Logout</a>
 						{% else %}
 							<a class="nav-item nav-link" href="{{ url_for('users.login')}}">Login</a>
@@ -62,10 +63,11 @@
 			{% block content %}{% endblock %}
 		</div>
 	  </div>
+
 	</main>
 
-	<footer class="site-footer">
-		<nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
+	<footer class="site-footer pt-8">
+		<nav class="navbar navbar-dark bg-steel fixed-bottom">
 			<div class="container">
 				<div class="navbar-nav mr-auto">
 				</div>

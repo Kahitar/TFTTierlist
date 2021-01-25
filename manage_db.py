@@ -1,6 +1,6 @@
 import tierlist
 from tierlist import create_app, db
-from tierlist.models import User, Tierlist, Comp
+from tierlist.models import User, Tierlist, Comp, Post
 
 app = create_app()
 
@@ -25,17 +25,16 @@ def create_db():
 
 def manage():
     with app.app_context():
-        # user_1 = User.query.first()
-        # list_1 = Tierlist.query.first()
+        user_1 = User.query.first()
+        list_1 = Tierlist.query.first()
 
         # for user in User.query.all():
         #     user.is_admin = False
 
+        post = Post.query.all()
         # db.session.commit()
-        user = User.query.all()
-        print(user)
-
-        tierlist = Tierlist.query.all()
+        # user = User.query.all()
+        print(post)
 
 
 if __name__ == '__main__':

@@ -27,11 +27,13 @@ def create_app(config_class=Config):
     from tierlist.main.routes import main  # main is the blueprint variable
     from tierlist.users.routes import users
     from tierlist.comps.routes import comps
+    from tierlist.posts.routes import posts
     from tierlist.errors.handlers import errors
 
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(comps)
+    app.register_blueprint(posts)
     app.register_blueprint(errors)
 
     return app
