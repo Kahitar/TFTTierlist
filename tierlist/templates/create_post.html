@@ -42,6 +42,9 @@
                         {% endfor %}
                     {% endif %}
                 </div>
+                {% if form.picture %}
+                    <img src="{{ url_for('static', filename='post_pics/' + form.picture.data) }}" class="img-rounded img-fluid"/>
+                {% endif %}
             </fieldset>
             <div class="form-group mb-2">
                 {{ form.submit(class="btn btn-outline-info") }}
