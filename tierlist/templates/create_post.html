@@ -19,7 +19,7 @@
                         {{ form.title(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group mb-2">
+                <div class="form-group mb-0">
                     {{ form.content.label(class="form-control-label") }} (HTML Enabled)
 
                     {% if form.content.errors %}
@@ -33,21 +33,30 @@
                         {{ form.content(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group mb-2">
-                    {{ form.picture.label() }}
-                    {{ form.picture(class="form-control-file") }}
-                    {% if form.picture.errors %}
-                        {% for error in form.picture.errors%}
-                            </br><span class="text-danger">{{ error }}</span></br>
-                        {% endfor %}
+            </fieldset>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group mb-4">
+                        {{ form.picture.label() }}
+                        {{ form.picture(class="form-control-file") }}
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors%}
+                                </br><span class="text-danger">{{ error }}</span></br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="form-group mb-2">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </div>
+                <div class="col-8">
+                    {% if form.picture.data %}
+                        <div class="form-group mb-2">
+                            <p>Current Picture</p>
+                            <img title="Current Picture" src="{{ url_for('static', filename='post_pics/' + form.picture.data) }}" class="img-rounded img-fluid"/>
+                        </div>
                     {% endif %}
                 </div>
-                {% if form.picture %}
-                    <img src="{{ url_for('static', filename='post_pics/' + form.picture.data) }}" class="img-rounded img-fluid"/>
-                {% endif %}
-            </fieldset>
-            <div class="form-group mb-2">
-                {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
             <div class="form-group mt-3">
@@ -59,6 +68,7 @@
                                 <li class="list-group-item"><code>&lt;b&gt;</code><b>Fat text</b><code>&lt;/b&gt;</code></li>
                                 <li class="list-group-item"><code>&lt;i&gt;</code><i>Italic text</i><code>&lt;/i&gt;</code></li>
                                 <li class="list-group-item"><code>&lt;u&gt;</code><u>Underlined</u><code>&lt;/u&gt;</code></li>
+                                <li class="list-group-item"><code>&lt;/br&gt;</code> New Line
                             </ul>
                         </div>
                         <div class="col-6">
@@ -66,6 +76,16 @@
                                 <li class="list-group-item active"><b>Links</b></li>
                                 <li class="list-group-item"><code>&lt;a href="</code>Link<code>"&gt;</code><a href="#">Link Text</a><code>&lt;/a&gt;</li></code>
                                 <li class="list-group-item"><code>&lt;a href="</code>Link<code>" target="_blank"&gt;</code><a href="#" target="_blank">Link in new Tab</a><code>&lt;/a&gt;</code></li>
+                            </ul>
+                            </br>
+                            <ul class="list-group">
+                                <li class="list-group-item active"><b>List</b></li>
+                                <li class="list-group-item">
+                                    <code>&lt;ul&gt;</code></br>
+                                        <code class="ml-2">&lt;li&gt;</code>Entry 1<code>&lt;/li&gt;</code></br>
+                                        <code class="ml-2">&lt;li&gt;</code>Entry 1<code>&lt;/li&gt;</code></br>
+                                    <code>&lt;/ul&gt;</code>
+                                </li>
                             </ul>
                         </div>
                     </div>
