@@ -22,6 +22,12 @@ def save_picture(form_picture):
     return picture_fn
 
 
+def delete_picture(picture_filename):
+    picture_path = os.path.join(
+        current_app.root_path, 'static/profile_pics', picture_filename)
+    os.remove(picture_path)
+
+
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Password Reset Request',

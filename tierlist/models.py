@@ -77,6 +77,7 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False,
                             default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
+    image_file = db.Column(db.String(20), nullable=True)
 
     # One-to-many relationship between User and Post
     #    The 'user' in 'user.id' is lowercase here because SQLAlchemy automatically creates

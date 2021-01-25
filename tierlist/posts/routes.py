@@ -4,6 +4,7 @@ from flask_login import current_user, login_required
 from tierlist import db
 from tierlist.models import Post
 from tierlist.posts.forms import PostForm
+from tierlist.posts.utils import save_picture, delete_picture
 
 posts = Blueprint('posts', __name__)
 
@@ -13,8 +14,13 @@ posts = Blueprint('posts', __name__)
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data,
-                    content=form.content.data, author=current_user)
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            post = Post(title=form.title.data, content=form.content.data,
+                        image_file=picture_file, author=current_user)
+        else:
+            post = Post(title=form.title.data,
+                        content=form.content.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash("Your post has been created!", "success")
@@ -40,6 +46,13 @@ def update_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
+        if form.picture.data:
+            # Delete old picture
+            if post.image_file:
+                delete_picture(post.image_file)
+            # Save new picture
+            picture_file = save_picture(form.picture.data)
+            post.image_file = picture_file
         db.session.commit()
         flash("Your post has been updated!", "success")
         return redirect(url_for("posts.post", post_id=post.id))
