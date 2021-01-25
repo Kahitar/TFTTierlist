@@ -3,10 +3,7 @@ from tierlist import db
 from tierlist.models import Tierlist, Comp
 
 
-def update_tierlist(list_id):
-    tierlist = Tierlist.query.filter_by(id=list_id).first()
-    comps = Comp.query.filter_by(tierlist=tierlist).all()
-
+def update_tierlist(tierlist):
     fix_subtier_gaps()
     tierlist.last_updated = datetime.now()
     db.session.commit()

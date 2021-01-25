@@ -104,7 +104,7 @@
 
                 {% if post.content|length > 150 %}
                     <p class="article-content">
-                        {{ post.content[:150]|safe|urlize(40, true, target="_blank") }}
+                        {{ post.content|truncate(150)|safe|urlize(40, true, target="_blank") }}
                         <a class="text-muted" href="{{ url_for('posts.post', post_id=post.id) }}">[...] Read more...</a>
                     </p>
                 {% else %}

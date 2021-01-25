@@ -24,7 +24,7 @@ def new_comp():
                     tierlist=Tierlist.query.first())
         db.session.add(comp)
         db.session.commit()
-        update_tierlist(list_id=Tierlist.query.first().id)
+        update_tierlist(Tierlist.query.first())
         flash("The comp has been created.", "success")
         return redirect(url_for('main.home'))
     return render_template('create_comp.html', title='New Comp',
@@ -45,7 +45,7 @@ def update_comp(comp_id):
         comp.lolchess = form.lolchess.data
         comp.chosen = form.chosen.data
         db.session.commit()
-        update_tierlist(list_id=Tierlist.query.first().id)
+        update_tierlist(Tierlist.query.first())
         flash("The comp has been updated.", "success")
         return redirect(url_for("main.home"))
     elif request.method == "GET":
@@ -71,7 +71,7 @@ def move_comp(comp_id, direction):
     if direction == 'down':
         utils.sub_tier_down(comp, all_comps)
 
-    fix_subtier_gaps()
+    update_tierlist(comp.tierlist)
     db.session.commit()
     return redirect(url_for('main.home'))
 
@@ -85,6 +85,6 @@ def delete_comp(comp_id):
 
     db.session.delete(comp)
     db.session.commit()
-    update_tierlist(list_id=Tierlist.query.first().id)
+    update_tierlist(Tierlist.query.first())
     flash("The comp has been deleted.", "success")
     return redirect(url_for('main.home'))
