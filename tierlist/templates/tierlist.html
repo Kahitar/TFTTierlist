@@ -103,8 +103,10 @@
                 <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
 
                 {% if post.content|length > 150 %}
-                    <p class="article-content">{{ post.content[:150] }} ...</p>
-                    <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">Read more...</a>
+                    <p class="article-content">
+                        {{ post.content[:150] }}
+                        <a class="text-muted" href="{{ url_for('posts.post', post_id=post.id) }}">[...] Read more...</a>
+                    </p>
                 {% else %}
                     <p class="article-content">{{ post.content }}</p>
                 {% endif %}
