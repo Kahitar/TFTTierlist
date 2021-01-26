@@ -8,8 +8,12 @@ main = Blueprint('main', __name__)
 @main.route("/")
 @main.route("/home")
 def home():
-    comps = Comp.query.order_by(Comp.tier.asc(), Comp.sub_tier.asc()).all()
-    tierlist = Tierlist.query.first()
+    tierlist = Tierlist.query.filter_by(is_main=1).first()
+    if tierlist is None:
+        # If there's no main tierlist, just get the first result
+        tierlist = Tierlist.query.first()
+    comps = Comp.query.filter_by(tierlist=tierlist).order_by(
+        Comp.tier.asc(), Comp.sub_tier.asc()).all()
 
     posts = Post.query.order_by(Post.date_posted.desc()).all()
 

@@ -25,16 +25,22 @@ def create_db():
 
 def manage():
     with app.app_context():
-        user_1 = User.query.first()
-        list_1 = Tierlist.query.first()
+        # user_1 = User.query.first()
+        # list_1 = Tierlist.query.first()
 
         # for user in User.query.all():
         #     user.is_admin = False
 
-        post = Post.query.all()
+        # post = Post.query.all()
         # db.session.commit()
         # user = User.query.all()
-        print(post)
+
+        # list_1.name = "Live"
+        # print(list_1)
+        # db.session.commit()
+
+        print("Is main:", Tierlist.query.first().is_main)
+        print(Tierlist.query.filter_by(is_main=True).all())
 
 
 if __name__ == '__main__':
