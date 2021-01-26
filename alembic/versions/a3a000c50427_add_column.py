@@ -22,4 +22,5 @@ def upgrade():
 
 
 def downgrade():
-    op.drop_column('Post', 'last_transaction_date')
+    with op.batch_alter_table("Post") as batch_op:
+        batch_op.drop_column('image_file')

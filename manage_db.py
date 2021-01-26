@@ -39,8 +39,9 @@ def manage():
         # print(list_1)
         # db.session.commit()
 
-        print("Is main:", Tierlist.query.first().is_main)
-        print(Tierlist.query.filter_by(is_main=True).all())
+        Tierlist.query.first().name = "Live"
+        print(Tierlist.query.filter_by(is_public=True).all())
+        db.session.commit()
 
 
 if __name__ == '__main__':

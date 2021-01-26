@@ -17,13 +17,13 @@ depends_on = None
 
 def upgrade():
     op.add_column('Tierlist', sa.Column('name', sa.String(
-        100), nullable=False, server_default="new tierlist"))
+        100), nullable=False, server_default="New Tierlist"))
 
     op.add_column('Tierlist', sa.Column(
-        'is_main', sa.Integer))
+        'is_public', sa.Integer))
 
 
 def downgrade():
     with op.batch_alter_table("Tierlist") as batch_op:
         batch_op.drop_column('name')
-        batch_op.drop_column('is_main')
+        batch_op.drop_column('is_public')

@@ -1,5 +1,4 @@
 <div class="container">
-    <h1>Sologesang - Tierlist</h1>
     <div>Last update: {{ tierlist.last_updated.strftime('%d.%m.%Y') }}</div>
     <table class="table table-hover table-sm">
     <tbody>
@@ -9,7 +8,7 @@
             <th>SYNERGIES</th>
             <th>CHOSEN</th>
             <th>ITEMS & POSITIONING</th>
-            {% if current_user.is_authenticated and current_user.is_admin %}
+            {% if current_user.is_authenticated and current_user == tierlist.author %}
                 <th class="text-center" colspan="2">Tier Up/Down</th>
                 <th class="text-center" colspan="2">Row Up/Down</th>
                 <th>Comp</th>

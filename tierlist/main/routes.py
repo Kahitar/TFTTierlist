@@ -8,7 +8,7 @@ main = Blueprint('main', __name__)
 @main.route("/")
 @main.route("/home")
 def home():
-    tierlist = Tierlist.query.filter_by(is_main=1).first()
+    tierlist = Tierlist.query.filter_by(is_public=1).first()
     if tierlist is None:
         # If there's no main tierlist, just get the first result
         tierlist = Tierlist.query.first()
