@@ -13,7 +13,7 @@ def home():
 
     posts = Post.query.order_by(Post.date_posted.desc()).all()
 
-    return render_template('tierlist.html', comps=comps, tierlist=tierlist, posts=posts, title="Sologesang")
+    return render_template('home.html', comps=comps, tierlist=tierlist, posts=posts, title="Sologesang")
 
 
 @main.route("/about")
