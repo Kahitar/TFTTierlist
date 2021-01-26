@@ -3,7 +3,7 @@ from flask import (render_template, url_for, flash,
 from flask_login import current_user, login_required
 from tierlist import db
 from tierlist.models import Tierlist, Comp
-from tierlist.tierlist.forms import ManageTierlistForm
+from tierlist.tierlist.forms import TierlistPropertiesForm
 
 tierlists = Blueprint('tierlists', __name__)
 
@@ -11,7 +11,7 @@ tierlists = Blueprint('tierlists', __name__)
 @tierlists.route('/tierlist/create', methods=["GET", "POST"])
 @login_required
 def new_tierlist():
-    form = ManageTierlistForm()
+    form = TierlistPropertiesForm()
 
     if form.validate_on_submit():
         name = form.name.data
@@ -23,14 +23,14 @@ def new_tierlist():
         flash("New Tierlist has been created.", "success")
         return redirect(url_for('tierlists.manage'))
 
-    return render_template('manage_tierlist.html', form=form)
+    return render_template('tierlist_properties.html', form=form)
 
 
-@tierlists.route('/tierlist/<int:tierlist_id>/update', methods=["GET", "POST"])
+@tierlists.route('/tierlist/<int:tierlist_id>/properties', methods=["GET", "POST"])
 @login_required
-def update_tierlist(tierlist_id):
+def tierlist_properties(tierlist_id):
     tierlist = Tierlist.query.filter_by(id=tierlist_id).first()
-    form = ManageTierlistForm()
+    form = TierlistPropertiesForm()
     if form.validate_on_submit():
         tierlist.name = form.name.data
         tierlist.is_public = form.is_public.data
@@ -40,7 +40,7 @@ def update_tierlist(tierlist_id):
     elif request.method == 'GET':
         form.name.data = tierlist.name
         form.is_public.data = tierlist.is_public
-    return render_template('manage_tierlist.html', form=form)
+    return render_template('tierlist_properties.html', form=form)
 
 
 @tierlists.route('/tierlist/manage')

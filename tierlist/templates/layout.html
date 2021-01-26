@@ -28,12 +28,10 @@
 				<div class="collapse navbar-collapse" id="navbarToggle">
 					<div class="navbar-nav mr-auto">
 						<a class="nav-item nav-link" href="{{ url_for('main.home')}}">Tierlist</a>
-						<a class="nav-item nav-link" href="https://www.twitch.tv/sologesang" target="_blank">Stream</a>
 					</div>
 					<!-- Navbar Right Side -->
 					<div class="navbar-nav">
 						{% if current_user.is_authenticated and current_user.is_admin %}
-							<a class="nav-item nav-link" href="{{ url_for('comps.new_comp') }}">Add Comp</a>
 							<a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">New Post</a>
 							<a class="nav-item nav-link" href="{{ url_for('tierlists.manage') }}">My Tierlists</a>
 						{% endif %}
@@ -68,10 +66,11 @@
 
 	</main>
 
-	<footer class="site-footer pt-8">
+	<footer class="site-footer">
 		<nav class="navbar navbar-dark bg-steel fixed-bottom">
 			<div class="container">
 				<div class="navbar-nav mr-auto">
+					<a class="nav-item nav-link" href="https://www.twitch.tv/sologesang" target="_blank">twitch.tv/sologesang</a>
 				</div>
 				<div class="navbar-nav">
 					<a class="nav-item nav-link" href="{{ url_for('main.impressum')}}">Impressum</a>

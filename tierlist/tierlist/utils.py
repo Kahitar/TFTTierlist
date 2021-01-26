@@ -3,7 +3,7 @@ from tierlist import db
 from tierlist.models import Tierlist, Comp
 
 
-def update_tierlist(tierlist):
+def tierlist_properties(tierlist):
     fix_subtier_gaps()
     tierlist.last_updated = datetime.now()
     db.session.commit()

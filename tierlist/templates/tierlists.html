@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Your Tierlists</h1>
-    <a class="btn btn-info btn-sm float-right" href="{{ url_for('tierlists.new_tierlist') }}">Add Tierlist</a>
+    <!-- <a class="btn btn-outline-info btn-sm mb-2" href="{{ url_for('tierlists.new_tierlist') }}">Add Tierlist</a> -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         {% for tierlist in tierlists %}
             <li class="nav-item">
@@ -12,6 +12,9 @@
                 {% endif %}
             </li>
         {% endfor %}
+        <li class="nav-item">
+            <a class="btn btn-outline-info pull-right" id="add-list-tab" href="{{ url_for('tierlists.new_tierlist') }}" role="tab">Add Tierlist</a>
+        </li>
     </ul>
 
     <div class="tab-content">
@@ -21,11 +24,6 @@
             {% else %}
                 <div class="tab-pane fade" id="page-{{ loop.index }}" role="tabpanel" aria-labelledby="page-{{ loop.index }}-tab">
             {% endif %}
-                    {% if current_user.is_authenticated and current_user == tierlist.author %}
-                        <div class="container mt-2">
-                            <a class="btn btn-info btn-sm" href="{{ url_for('tierlists.update_tierlist', tierlist_id=tierlist.id) }}">Manage</a>
-                        </div>
-                    {% endif %}
 
                     {% set comps = all_comps[loop.index-1] %}
 

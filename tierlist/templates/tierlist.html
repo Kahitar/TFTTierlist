@@ -1,5 +1,17 @@
 <div class="container">
-    <div>Last update: {{ tierlist.last_updated.strftime('%d.%m.%Y') }}</div>
+    <!-- <nav class="navbar navbar-expand-md"> -->
+        {% if current_user.is_authenticated and current_user == tierlist.author %}
+            <div class="float-left mt-2 mb-2 mr-2">
+                <a class="btn btn-sm btn-outline-info" href="{{ url_for('comps.new_comp', tierlist_id=tierlist.id) }}">Add Comp</a>
+            </div>
+            <div class="float-left mt-2 mb-2 mr-2">
+                <a class="btn btn-sm btn-outline-info" href="{{ url_for('tierlists.tierlist_properties', tierlist_id=tierlist.id) }}">Options</a>
+            </div>
+        {% endif %}
+        <div class="float-right mt-2 mr-2">
+            <div class="nav-item">Last update: {{ tierlist.last_updated.strftime('%d.%m.%Y') }}</div>
+        </div>
+    <!-- </div> -->
     <table class="table table-hover table-sm">
     <tbody>
         <tr class="table-active">
