@@ -52,3 +52,16 @@ def manage():
         all_comps.append(Comp.query.filter_by(tierlist=t_list).order_by(
             Comp.tier.asc(), Comp.sub_tier.asc()).all())
     return render_template("tierlists.html", tierlists=tierlists, all_comps=all_comps)
+
+
+@tierlists.route("/tierlist/<int:tierlist_id>/delete", methods=["POST"])
+@login_required
+def delete_tierlist(tierlist_id):
+    tierlist = Tierlist.query.get_or_404(tierlist_id)
+    if tierlist.author != current_user:
+        abort(403)
+
+    db.session.delete(tierlist)
+    db.session.commit()
+    flash("Your tierlist has been deleted.", "success")
+    return redirect(url_for('tierlists.manage'))

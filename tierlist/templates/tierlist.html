@@ -7,6 +7,9 @@
             <div class="float-left mt-2 mb-2 mr-2">
                 <a class="btn btn-sm btn-outline-info" href="{{ url_for('tierlists.tierlist_properties', tierlist_id=tierlist.id) }}">Options</a>
             </div>
+            <div class="float-left mt-2 mb-2 mr-2">
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteTierlistModal">Delete Tierlist</button>
+            </div>
         {% endif %}
         <div class="float-right mt-2 mr-2">
             <div class="nav-item">Last update: {{ tierlist.last_updated.strftime('%d.%m.%Y') }}</div>
@@ -63,13 +66,13 @@
                     </td>
                     <td style="width: 130px">
                         <a class="btn btn-info btn-sm" href="{{ url_for('comps.update_comp', comp_id=comp.id) }}">Edit</a>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ comp.id }}">Delete</button>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCompModal{{ comp.id }}">Delete</button>
                     </td>
                 {% endif %}
             </tr>
 
-            <!-- Modal from https://getbootstrap.com/docs/4.3/components/modal/#live-demo -->
-            <div class="modal fade" id="deleteModal{{ comp.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <!-- Modal to delete comp (from https://getbootstrap.com/docs/4.3/components/modal/#live-demo) -->
+            <div class="modal fade" id="deleteCompModal{{ comp.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -90,4 +93,24 @@
     	{% endfor %}
     </tbody>
     </table>
+
+    <!-- Modal to delete tierlist -->
+    <div class="modal fade" id="deleteTierlistModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Delete Tierlist?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <form action="{{ url_for('tierlists.delete_tierlist', tierlist_id=tierlist.id) }}" method="POST">
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
