@@ -19,7 +19,7 @@
             </tr>
         	{% for comp in comps %}
                 <tr>
-                    <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}.{{ comp.sub_tier }}</td>
+                    <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}</td>
                     <td class="ml-2">{{ comp.carries }}</td>
                     <td class="ml-2">{{ comp.synergies }}</td>
                     <td class="ml-2">{{ comp.chosen }}</td>
@@ -104,11 +104,11 @@
 
                 {% if post.content|length > 150 %}
                     <p class="article-content">
-                        {{ post.content|truncate(150)|safe|urlize(40, true, target="_blank") }}
+                        {{ post.content|truncate(150)|safe|urlize(30, nofollow=true, target="_blank") }}
                         <a class="text-muted" href="{{ url_for('posts.post', post_id=post.id) }}">[...] Read more...</a>
                     </p>
                 {% else %}
-                    <p class="article-content">{{ post.content|safe|urlize(40, true, target="_blank") }}</p>
+                    <p class="article-content">{{ post.content|safe|urlize(60, true, target="_blank") }}</p>
                 {% endif %}
                 {% if post.image_file %}
                     <img src="{{ url_for('static', filename='post_pics/' + post.image_file) }}" class="img-rounded img-fluid"/>
