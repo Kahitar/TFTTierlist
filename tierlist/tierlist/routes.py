@@ -40,18 +40,23 @@ def tierlist_properties(tierlist_id):
     elif request.method == 'GET':
         form.name.data = tierlist.name
         form.is_public.data = tierlist.is_public
-    return render_template('tierlist_properties.html', form=form, tierlist=tierlist)
+    return render_template('tierlist_properties.html', form=form, tierlist=tierlist, legend="Tierlist Properties")
 
 
 @tierlists.route('/tierlist/manage')
+@tierlists.route('/tierlist/manage/<int:active_tierlist_id>')
 @login_required
-def manage():
+def manage(active_tierlist_id=None):
     tierlists = Tierlist.query.filter_by(author=current_user).all()
     all_comps = []
     for t_list in tierlists:
         all_comps.append(Comp.query.filter_by(tierlist=t_list).order_by(
             Comp.tier.asc(), Comp.sub_tier.asc()).all())
-    return render_template("tierlists.html", tierlists=tierlists, all_comps=all_comps)
+    if active_tierlist_id:
+        active_tierlist = Tierlist.query.get_or_404(active_tierlist_id)
+    else:
+        active_tierlist = None
+    return render_template("tierlists.html", tierlists=tierlists, all_comps=all_comps, active_tierlist=active_tierlist)
 
 
 @tierlists.route("/tierlist/<int:tierlist_id>/delete", methods=["POST"])

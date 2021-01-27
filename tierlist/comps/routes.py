@@ -26,7 +26,7 @@ def new_comp(tierlist_id):
         db.session.commit()
         update_tierlist(Tierlist.query.get_or_404(tierlist_id))
         flash("The comp has been created.", "success")
-        return redirect(url_for('main.home'))
+        return redirect(url_for('tierlists.manage', active_tierlist_id=tierlist_id))
     return render_template('create_comp.html', title='New Comp',
                            form=form, legend="New Comp")
 
@@ -47,7 +47,7 @@ def update_comp(comp_id):
         db.session.commit()
         update_tierlist(comp.tierlist)
         flash("The comp has been updated.", "success")
-        return redirect(url_for("main.home"))
+        return redirect(url_for('tierlists.manage', active_tierlist_id=comp.tierlist.id))
     elif request.method == "GET":
         form.carries.data = comp.carries
         form.synergies.data = comp.synergies
@@ -73,7 +73,7 @@ def move_comp(comp_id, direction):
 
     update_tierlist(comp.tierlist)
     db.session.commit()
-    return redirect(url_for('main.home'))
+    return redirect(url_for('tierlists.manage', active_tierlist_id=comp.tierlist.id))
 
 
 @comps.route("/comp/<int:comp_id>/delete", methods=["POST"])
@@ -87,4 +87,4 @@ def delete_comp(comp_id):
     db.session.commit()
     update_tierlist(comp.tierlist)
     flash("The comp has been deleted.", "success")
-    return redirect(url_for('main.home'))
+    return redirect(url_for('tierlists.manage', active_tierlist_id=comp.tierlist.id))
