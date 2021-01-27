@@ -29,7 +29,7 @@ def new_tierlist():
 @tierlists.route('/tierlist/<int:tierlist_id>/properties', methods=["GET", "POST"])
 @login_required
 def tierlist_properties(tierlist_id):
-    tierlist = Tierlist.query.filter_by(id=tierlist_id).first()
+    tierlist = Tierlist.query.get_or_404(tierlist_id)
     form = TierlistPropertiesForm()
     if form.validate_on_submit():
         tierlist.name = form.name.data
@@ -40,7 +40,7 @@ def tierlist_properties(tierlist_id):
     elif request.method == 'GET':
         form.name.data = tierlist.name
         form.is_public.data = tierlist.is_public
-    return render_template('tierlist_properties.html', form=form)
+    return render_template('tierlist_properties.html', form=form, tierlist=tierlist)
 
 
 @tierlists.route('/tierlist/manage')
@@ -61,6 +61,10 @@ def delete_tierlist(tierlist_id):
     if tierlist.author != current_user:
         abort(403)
 
+    # Delete all comps of this tierlist
+    for comp in tierlist.comps:
+        db.session.delete(comp)
+    # Delete the tierlist itself
     db.session.delete(tierlist)
     db.session.commit()
     flash("Your tierlist has been deleted.", "success")

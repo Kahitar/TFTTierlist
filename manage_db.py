@@ -38,10 +38,8 @@ def manage():
         # list_1.name = "Live"
         # print(list_1)
         # db.session.commit()
-
-        Tierlist.query.first().name = "Live"
-        print(Tierlist.query.filter_by(is_public=True).all())
-        db.session.commit()
+        print(Tierlist.query.all())
+        print(Comp.query.all())
 
 
 if __name__ == '__main__':
