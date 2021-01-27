@@ -5,7 +5,7 @@ from tierlist import db
 from tierlist.models import Comp, Tierlist
 from tierlist.comps import utils
 from tierlist.comps.forms import CompForm
-from tierlist.tierlist.utils import tierlist_properties, fix_subtier_gaps
+from tierlist.tierlist.utils import update_tierlist, fix_subtier_gaps
 
 comps = Blueprint('comps', __name__)
 
@@ -24,7 +24,7 @@ def new_comp(tierlist_id):
                     tierlist=Tierlist.query.filter_by(id=tierlist_id).first())
         db.session.add(comp)
         db.session.commit()
-        tierlist_properties(Tierlist.query.first())
+        update_tierlist(Tierlist.query.get_or_404(tierlist_id))
         flash("The comp has been created.", "success")
         return redirect(url_for('main.home'))
     return render_template('create_comp.html', title='New Comp',
@@ -45,7 +45,7 @@ def update_comp(comp_id):
         comp.lolchess = form.lolchess.data
         comp.chosen = form.chosen.data
         db.session.commit()
-        tierlist_properties(Tierlist.query.first())
+        update_tierlist(comp.tierlist)
         flash("The comp has been updated.", "success")
         return redirect(url_for("main.home"))
     elif request.method == "GET":
@@ -71,7 +71,7 @@ def move_comp(comp_id, direction):
     if direction == 'down':
         utils.sub_tier_down(comp, all_comps)
 
-    tierlist_properties(comp.tierlist)
+    update_tierlist(comp.tierlist)
     db.session.commit()
     return redirect(url_for('main.home'))
 
@@ -85,6 +85,6 @@ def delete_comp(comp_id):
 
     db.session.delete(comp)
     db.session.commit()
-    tierlist_properties(Tierlist.query.first())
+    update_tierlist(comp.tierlist)
     flash("The comp has been deleted.", "success")
     return redirect(url_for('main.home'))
