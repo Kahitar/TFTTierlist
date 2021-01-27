@@ -23,7 +23,7 @@ def new_tierlist():
         flash("New Tierlist has been created.", "success")
         return redirect(url_for('tierlists.manage'))
 
-    return render_template('tierlist_properties.html', form=form)
+    return render_template('tierlist_properties.html', form=form, legend="Create New Tierlist")
 
 
 @tierlists.route('/tierlist/<int:tierlist_id>/properties', methods=["GET", "POST"])

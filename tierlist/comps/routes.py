@@ -21,7 +21,7 @@ def new_comp(tierlist_id):
                     synergies=form.synergies.data,
                     lolchess=form.lolchess.data,
                     chosen=form.chosen.data,
-                    tierlist=Tierlist.query.filter_by(id=tierlist_id).first())
+                    tierlist=Tierlist.query.get_or_404(tierlist_id))
         db.session.add(comp)
         db.session.commit()
         update_tierlist(Tierlist.query.get_or_404(tierlist_id))
