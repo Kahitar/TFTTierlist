@@ -6,6 +6,13 @@ body {
   zoom: 85%;
 }
 
+.modal-backdrop {
+  /* Need to modify this bootstrap class for the
+     modal to be correct on the zoomed in body */
+  width: 100% !important;
+  height: 100% !important;
+}
+
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
