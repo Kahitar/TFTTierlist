@@ -38,7 +38,7 @@
                 <td class="ml-2">{{ comp.chosen }}</td>
                 <td class="ml-2">{{ comp.lolchess|urlize(20, true, target="_blank") }}</td>
 
-                {% if current_user.is_authenticated and current_user.is_admin %}
+                {% if current_user.is_authenticated and current_user == tierlist.author %}
                     <td>
                         {% if comp.tier > 1 or comp.sub_tier > 1 %}
                             <a class="btn btn-info btn-sm float-right" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-up') }}">
