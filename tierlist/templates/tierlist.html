@@ -1,17 +1,17 @@
+{% set max_tier = 5 %}
+
 <div class="container">
-    <!-- <nav class="navbar navbar-expand-md"> -->
-        {% if current_user.is_authenticated and current_user == tierlist.author %}
-            <div class="float-left mt-2 mb-2 mr-2">
-                <a class="btn btn-sm btn-outline-info" href="{{ url_for('comps.new_comp', tierlist_id=tierlist.id) }}">Add Comp</a>
-            </div>
-            <div class="float-left mt-2 mb-2 mr-2">
-                <a class="btn btn-sm btn-outline-info" href="{{ url_for('tierlists.tierlist_properties', tierlist_id=tierlist.id) }}">Options</a>
-            </div>
-        {% endif %}
-        <div class="float-right mt-2 mr-2">
-            <div class="nav-item bg-warning">Last update: {{ tierlist.last_updated.strftime('%d.%m.%Y') }}</div>
+    {% if current_user.is_authenticated and current_user == tierlist.author %}
+        <div class="float-left mt-2 mb-2 mr-2">
+            <a class="btn btn-sm btn-outline-info" href="{{ url_for('comps.new_comp', tierlist_id=tierlist.id) }}">Add Comp</a>
         </div>
-    <!-- </div> -->
+        <div class="float-left mt-2 mb-2 mr-2">
+            <a class="btn btn-sm btn-outline-info" href="{{ url_for('tierlists.tierlist_properties', tierlist_id=tierlist.id) }}">Options</a>
+        </div>
+    {% endif %}
+    <div class="float-right mt-2 mr-2">
+        <div class="nav-item bg-warning">Last update: {{ tierlist.last_updated.strftime('%d.%m.%Y') }}</div>
+    </div>
     <table class="table table-hover table-sm">
     <tbody>
         <tr class="table-active">
@@ -28,7 +28,11 @@
         </tr>
     	{% for comp in comps %}
             <tr>
-                <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}</td>
+                {% if comp.tier == 6 %}
+                    <td></td>
+                {% else %}
+                    <td class="tier-{{ comp.tier }}">Tier {{ comp.tier }}</td>
+                {% endif %}
                 <td class="ml-2">{{ comp.carries }}</td>
                 <td class="ml-2">{{ comp.synergies }}</td>
                 <td class="ml-2">{{ comp.chosen }}</td>
@@ -43,19 +47,21 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a class="btn btn-info btn-sm" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-down') }}">
-                            <img src="{{ url_for('static', filename='arrow-down-tier.ico') }}" alt="Tier down" class="">
-                        </a>
+                        {% if comp.tier < (max_tier+1) %}
+                            <a class="btn btn-info btn-sm" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-down') }}">
+                                <img src="{{ url_for('static', filename='arrow-down-tier.ico') }}" alt="Tier down" class="">
+                            </a>
+                        {% endif %}
                     </td>
                     <td>
-                        {% if comp.tier > 1 or comp.sub_tier > 1 %}
+                        {% if (comp.tier > 1 or comp.sub_tier > 1) and comp.tier < (max_tier+1) %}
                             <a class="btn btn-info btn-sm float-right" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='up') }}">
                                 <img src="{{ url_for('static', filename='arrow-up-sub-tier.ico') }}" alt="Sub Tier up" class="">
                             </a>
                         {% endif %}
                     </td>
                     <td>
-                        {% if comp != comps[-1] %}
+                        {% if comp != comps[-1] and comp.tier < (max_tier+1) %}
                             <a class="btn btn-info btn-sm" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='down') }}">
                                 <img src="{{ url_for('static', filename='arrow-down-sub-tier.ico') }}" alt="Sub Tier down" class="">
                             </a>

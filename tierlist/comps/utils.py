@@ -1,8 +1,6 @@
 
 
 def get_max_subtier(comps):
-    print("Same tier: ", comps)
-
     max_subtier = 0
     for comp in comps:
         if comp.sub_tier > max_subtier:

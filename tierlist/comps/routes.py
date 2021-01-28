@@ -15,7 +15,7 @@ comps = Blueprint('comps', __name__)
 def new_comp(tierlist_id):
     form = CompForm()
     if form.validate_on_submit():
-        comp = Comp(tier=0,
+        comp = Comp(tier=6,
                     sub_tier=0,
                     carries=form.carries.data,
                     synergies=form.synergies.data,
