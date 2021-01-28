@@ -1,9 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
     {% if tierlists|length > 0 %}
-        <div class="media">
+        <div class="media m-2">
             <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + tierlists[0].author.image_file) }}">
-            <h1>{{ tierlists[0].author.username }}'s Tierlist</h1>
+            {% if tierlists|length == 1 %}
+                <h1>{{ tierlists[0].author.username }}'s Tierlist {{ tierlists[0].name }}</h1>
+            {% else %}
+                <h1>{{ tierlists[0].author.username }}'s Tierlists</h1>
+            {% endif %}
         </div>
     {% else %}
         <div class="media bg-danger m-3">
@@ -48,8 +52,8 @@
     {% endif %}
 
     {% if tierlists|length > 0 %}
-        <div class="media">
-            <h1>{{ tierlists[0].author.username }}'s Posts</h1>
+        <div class="media m-2">
+            <h1>Information</h1>
         </div>
         {% include "all_posts.html" %}
     {% endif %}
