@@ -1,10 +1,57 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="media">
-        <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + tierlist.author.image_file) }}">
-        <h1>{{ tierlist.author.username }}'s Tierlist</h1>
-    </div>
-    {% include "tierlist.html" %}
-    {% include "all_posts.html" %}
+    {% if tierlists|length > 0 %}
+        <div class="media">
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + tierlists[0].author.image_file) }}">
+            <h1>{{ tierlists[0].author.username }}'s Tierlist</h1>
+        </div>
+    {% else %}
+        <div class="media bg-danger m-3">
+            <h1>No public Tierlists available</h1>
+        </div>
+    {% endif %}
+    {% if tierlists|length > 1 %}
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for tierlist in tierlists %}
+                <li class="nav-item">
+                    {% if (tierlist == active_tierlist) or (not active_tierlist and loop.index == 1) %}
+                    <a class="nav-link active" id="page-{{ loop.index }}-tab" data-toggle="tab" href="#page-{{ loop.index }}"
+                        role="tab" aria-controls="page-{{ loop.index }}" aria-selected="true">{{ tierlist.name }}</a>
+                    {% else %}
+                    <a class="nav-link" id="page-{{ loop.index }}-tab" data-toggle="tab" href="#page-{{ loop.index }}" role="tab"
+                        aria-controls="page-{{ loop.index }}" aria-selected="false">{{ tierlist.name }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="tab-content">
+            {% for tierlist in tierlists %}
+                {% if (tierlist == active_tierlist) or (not active_tierlist and loop.index == 1) %}
+                    <div class="tab-pane fade show active" id="page-{{ loop.index }}" role="tabpanel"
+                        aria-labelledby="page-{{ loop.index }}-tab">
+                {% else %}
+                    <div class="tab-pane fade" id="page-{{ loop.index }}" role="tabpanel"
+                        aria-labelledby="page-{{ loop.index }}-tab">
+                {% endif %}
+
+                    {% set comps = all_comps[loop.index-1] %}
+
+                    {% include "tierlist.html" %}
+                    </div>
+            {% endfor %}
+        </div>
+    {% elif tierlists|length > 0 %}
+        {% set comps = all_comps[0] %}
+        {% set tierlist = tierlists[0] %}
+        {% include "tierlist.html" %}
+    {% endif %}
+
+    {% if tierlists|length > 0 %}
+        <div class="media">
+            <h1>{{ tierlists[0].author.username }}'s Posts</h1>
+        </div>
+        {% include "all_posts.html" %}
+    {% endif %}
 
 {% endblock content %}

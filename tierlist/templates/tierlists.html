@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Your Tierlists</h1>
-    <!-- <a class="btn btn-outline-info btn-sm mb-2" href="{{ url_for('tierlists.new_tierlist') }}">Add Tierlist</a> -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         {% for tierlist in tierlists %}
             <li class="nav-item">
