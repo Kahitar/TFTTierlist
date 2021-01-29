@@ -9,7 +9,7 @@ NGINX
 GUNICORN
 --------
 
-- Add app to gunicorn (from app root, processes * 2 + 1 workers = 3):
+- Add app to gunicorn (from app root, 'processes * 2 + 1' workers = 3):
     $ gunicorn -w 3 run:app
 
 

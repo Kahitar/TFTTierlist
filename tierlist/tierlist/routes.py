@@ -21,7 +21,7 @@ def new_tierlist():
         db.session.add(new_tierlist)
         db.session.commit()
         flash("New Tierlist has been created.", "success")
-        return redirect(url_for('tierlists.manage'))
+        return redirect(url_for('tierlists.manage', active_tierlist_id=new_tierlist.id))
 
     return render_template('tierlist_properties.html', form=form, legend="Create New Tierlist")
 
@@ -36,7 +36,7 @@ def tierlist_properties(tierlist_id):
         tierlist.is_public = form.is_public.data
         db.session.commit()
         flash("The tierlist has been updated.", "success")
-        return redirect(url_for('tierlists.manage'))
+        return redirect(url_for('tierlists.manage', active_tierlist_id=tierlist.id))
     elif request.method == 'GET':
         form.name.data = tierlist.name
         form.is_public.data = tierlist.is_public

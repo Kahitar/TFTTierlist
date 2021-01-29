@@ -1,5 +1,5 @@
 from flask import render_template, request, Blueprint
-from tierlist.models import Comp, Tierlist, Post
+from tierlist.models import Comp, Tierlist, Post, User
 
 
 main = Blueprint('main', __name__)
@@ -10,7 +10,9 @@ main = Blueprint('main', __name__)
 @main.route("/home")
 @main.route("/home/<int:active_tierlist_id>")
 def home(active_tierlist_id=None):
-    tierlists = Tierlist.query.filter_by(is_public=1).all()
+    admins = User.query.filter_by(is_admin=True).all()
+    tierlists_nested = [Tierlist.query.filter_by(is_public=1, author=admin).all() for admin in admins] # This is not very efficient, but there should only ever be a few admins.
+    tierlists = [t_list for l in tierlists_nested for t_list in l]
     all_comps = []
     for t_list in tierlists:
         all_comps.append(Comp.query.filter_by(tierlist=t_list).order_by(
