@@ -46,7 +46,8 @@ def save_picture(form_picture):
 def delete_picture(picture_filename):
     picture_path = os.path.join(
         current_app.root_path, 'static/profile_pics', picture_filename)
-    os.remove(picture_path)
+    if os.path.isfile(picture_path):
+        os.remove(picture_path)
 
 
 def send_reset_email(user):
