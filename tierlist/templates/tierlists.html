@@ -1,37 +1,42 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Your Tierlists</h1>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        {% for tierlist in tierlists %}
+    {% if tierlists|length > 0 %}
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for tierlist in tierlists %}
+                <li class="nav-item">
+                    {% if (tierlist == active_tierlist) or (not active_tierlist and loop.index == 1) %}
+                        <a class="nav-link active" id="page-{{ loop.index }}-tab" data-toggle="tab" href="#page-{{ loop.index }}" role="tab"
+                            aria-controls="page-{{ loop.index }}" aria-selected="true">{{ tierlist.name }}</a>
+                    {% else %}
+                        <a class="nav-link" id="page-{{ loop.index }}-tab" data-toggle="tab" href="#page-{{ loop.index }}" role="tab" aria-controls="page-{{ loop.index }}" aria-selected="false">{{ tierlist.name }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
             <li class="nav-item">
-                {% if (tierlist == active_tierlist) or (not active_tierlist and loop.index == 1) %}
-                    <a class="nav-link active" id="page-{{ loop.index }}-tab" data-toggle="tab" href="#page-{{ loop.index }}" role="tab"
-                        aria-controls="page-{{ loop.index }}" aria-selected="true">{{ tierlist.name }}</a>
-                {% else %}
-                    <a class="nav-link" id="page-{{ loop.index }}-tab" data-toggle="tab" href="#page-{{ loop.index }}" role="tab" aria-controls="page-{{ loop.index }}" aria-selected="false">{{ tierlist.name }}</a>
-                {% endif %}
+                <a class="btn btn-outline-info ml-5" id="add-list-tab" href="{{ url_for('tierlists.new_tierlist') }}" role="tab">Add Tierlist</a>
             </li>
-        {% endfor %}
-        <li class="nav-item">
-            <a class="btn btn-outline-info ml-5" id="add-list-tab" href="{{ url_for('tierlists.new_tierlist') }}" role="tab">Add Tierlist</a>
-        </li>
-    </ul>
+        </ul>
 
-    <div class="tab-content">
-        {% for tierlist in tierlists %}
-            {% if (tierlist == active_tierlist) or (not active_tierlist and loop.index == 1) %}
-                <div class="tab-pane fade show active" id="page-{{ loop.index }}" role="tabpanel"
-                    aria-labelledby="page-{{ loop.index }}-tab">
-            {% else %}
-                <div class="tab-pane fade" id="page-{{ loop.index }}" role="tabpanel" aria-labelledby="page-{{ loop.index }}-tab">
-            {% endif %}
+        <div class="tab-content">
+            {% for tierlist in tierlists %}
+                {% if (tierlist == active_tierlist) or (not active_tierlist and loop.index == 1) %}
+                    <div class="tab-pane fade show active" id="page-{{ loop.index }}" role="tabpanel"
+                        aria-labelledby="page-{{ loop.index }}-tab">
+                {% else %}
+                    <div class="tab-pane fade" id="page-{{ loop.index }}" role="tabpanel" aria-labelledby="page-{{ loop.index }}-tab">
+                {% endif %}
 
-                    {% set comps = all_comps[loop.index-1] %}
+                        {% set comps = all_comps[loop.index-1] %}
 
-                    {% include "tierlist.html" %}
-                </div>
+                        {% include "tierlist.html" %}
+                    </div>
 
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h4 class="text-secondary">You have no tierlists.</h4>
+        <a class="btn btn-outline-info" id="add-list-tab" href="{{ url_for('tierlists.new_tierlist') }}" role="tab">Add Tierlist</a>
+    {% endif %}
 
 {% endblock content %}

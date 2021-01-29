@@ -1,10 +1,11 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from tierlist import db, bcrypt
-from tierlist.models import User, Post
+from tierlist.models import User, Post, Tierlist
 from tierlist.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                                   RequestResetForm, ResetPasswordForm)
-from tierlist.users.utils import save_picture, delete_picture, send_reset_email
+from tierlist.users.utils import (save_picture, delete_picture, send_reset_email,
+                                  get_users_tierlists, get_users_posts)
 
 
 users = Blueprint('users', __name__)
@@ -32,6 +33,61 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
+@users.route('/delete_user/<int:user_id>')
+@login_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    if current_user.is_admin and current_user != user:
+        print("USER:        ", user)
+        print("CURRENT USER:", current_user)
+        tierlists, all_comps = get_users_tierlists([user], False)
+        posts = get_users_posts([user])
+        for comps in all_comps:
+            for comp in comps:
+                db.session.delete(comp)
+        for t_list in tierlists:
+            db.session.delete(t_list)
+        for post in posts:
+            db.session.delete(post)
+        db.session.delete(user)
+        db.session.commit()
+        flash(f"Deleted user: {user}", "success")
+    elif current_user == user:
+        flash("You cannot delete your own account.", "danger")
+    else:
+        flash("You don't have the permission to do that...", "danger")
+    return redirect(url_for('main.home'))
+
+
+@users.route('/make_admin/<int:user_id>')
+@login_required
+def make_admin(user_id):
+    user = User.query.get_or_404(user_id)
+    if current_user.is_admin:
+        user.is_admin = True
+        db.session.commit()
+        flash(f"Made user admin: {user}", "success")
+        return redirect(url_for('main.search'))
+    else:
+        flash("You don't have the permission to do that...", "danger")
+        return redirect(url_for('main.search'))
+
+
+@users.route('/revoke_admin/<int:user_id>')
+@login_required
+def revoke_admin(user_id):
+    user = User.query.get_or_404(user_id)
+    if current_user.is_admin and current_user != user:
+        user.is_admin = False
+        db.session.commit()
+        flash(f"Revoked admin for user: {user}", "success")
+    elif current_user == user:
+        flash(f"Cannot revoke admin rights for your own account.", "danger")
+    else:
+        flash("You don't have the permission to do that...", "danger")
+    return redirect(url_for('main.search'))
+
+
 @users.route('/login', methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -54,6 +110,16 @@ def login():
 
         flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
+
+
+@users.route('/admin_login/<int:user_id>')
+@login_required
+def admin_login(user_id):
+    user = User.query.get_or_404(user_id)
+    if current_user.is_admin:
+        login_user(user, remember=False)
+        next_page = request.args.get('next')
+        return redirect(next_page) if next_page else redirect(url_for('main.search'))
 
 
 @users.route('/logout')
@@ -86,6 +152,32 @@ def account():
         'static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
+
+
+@users.route("/profile/<int:user_id>")
+@users.route("/profile/<int:user_id>/<int:active_tierlist_id>")
+def profile(user_id, active_tierlist_id=None):
+    user = User.query.get_or_404(user_id)
+    tierlists, comps = get_users_tierlists([user])
+    image_file = url_for(
+        'static', filename='profile_pics/' + user.image_file)
+
+    if active_tierlist_id:
+        active_tierlist = Tierlist.query.get_or_404(active_tierlist_id)
+    else:
+        active_tierlist = None
+
+    posts = get_users_posts([user])
+
+    return render_template(
+        'user_profile.html',
+        title=user.username,
+        user=user,
+        image_file=image_file,
+        tierlists=tierlists,
+        all_comps=comps,
+        active_tierlist=active_tierlist,
+        posts=posts)
 
 
 @users.route('/reset_password', methods=["GET", "POST"])

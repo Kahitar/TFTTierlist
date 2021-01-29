@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% if current_user.is_admin and current_user.id != user.id %}
+        <a href="{{ url_for('users.delete_user', user_id=user.id) }}" class="btn btn-danger float-right">Delete User Account</a>
+    {% endif %}
+
+    <div class="media ml-2">
+        <img class="rounded-circle account-img"
+            src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+        <div class="media-body">
+            {% if tierlists|length == 1 %}
+                <h1 class="account-heading">{{ user.username }}</h1>
+                <h4 class="text-secondary">Tierlist {{ tierlists[0].name }}</h4>
+            {% else %}
+                <h1 class="account-heading">{{ user.username }}</h1>
+                <h4 class="text-secondary">Tierlists</h4>
+            {% endif %}
+        </div>
+    </div>
+    {% if tierlists|length < 1 %}
+        <div class="media">
+            <p class="bg-warning m-3">No public Tierlists available.</p>
+        </div>
+    {% elif tierlists|length > 1 %}
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for tierlist in tierlists %}
+                <li class="nav-item">
+                    {% if (tierlist == active_tierlist) or (not active_tierlist and loop.index == 1) %}
+                        <a class="nav-link active" id="page-{{ loop.index }}-tab" data-toggle="tab" href="#page-{{ loop.index }}"
+                            role="tab" aria-controls="page-{{ loop.index }}" aria-selected="true">{{ tierlist.name }}</a>
+                    {% else %}
+                        <a class="nav-link" id="page-{{ loop.index }}-tab" data-toggle="tab" href="#page-{{ loop.index }}" role="tab"
+                            aria-controls="page-{{ loop.index }}" aria-selected="false">{{ tierlist.name }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="tab-content">
+            {% for tierlist in tierlists %}
+                {% if (tierlist == active_tierlist) or (not active_tierlist and loop.index == 1) %}
+                    <div class="tab-pane fade show active" id="page-{{ loop.index }}" role="tabpanel"
+                        aria-labelledby="page-{{ loop.index }}-tab">
+                {% else %}
+                    <div class="tab-pane fade" id="page-{{ loop.index }}" role="tabpanel"
+                        aria-labelledby="page-{{ loop.index }}-tab">
+                {% endif %}
+
+                        {% set comps = all_comps[loop.index-1] %}
+
+                        {% include "tierlist.html" %}
+                    </div>
+            {% endfor %}
+        </div>
+    {% elif tierlists|length > 0 %}
+        {% set comps = all_comps[0] %}
+        {% set tierlist = tierlists[0] %}
+        {% include "tierlist.html" %}
+    {% endif %}
+
+    <div class="media m-2">
+        <h2 class="text-secondary">Posts</h2>
+    </div>
+    {% if posts|length < 1 %}
+        <div class="media">
+            <p class="bg-warning m-3">No public posts available.</p>
+        </div>
+    {% else %}
+        {% include "all_posts.html" %}
+    {% endif %}
+
+{% endblock content %}
