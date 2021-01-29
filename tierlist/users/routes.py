@@ -56,7 +56,7 @@ def delete_user(user_id):
         flash("You cannot delete your own account.", "danger")
     else:
         flash("You don't have the permission to do that...", "danger")
-    return redirect(url_for('main.home'))
+    return redirect(url_for('main.search'))
 
 
 @users.route('/make_admin/<int:user_id>')
