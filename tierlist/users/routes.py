@@ -33,7 +33,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@users.route('/delete_user/<int:user_id>')
+@users.route('/delete_user/<int:user_id>', methods=["POST"])
 @login_required
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
@@ -198,6 +198,7 @@ def admin_password_reset(user_id):
     flash(f"Reset Link for user {user}:", 'success')
     flash(f"{url_for('users.reset_password', token=token, _external=True)}", 'success')
     return redirect(url_for('main.search'))
+
 
 @users.route('/reset_password/<token>', methods=["GET", "POST"])
 def reset_password(token):
