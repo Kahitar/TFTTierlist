@@ -1,9 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% if current_user.is_admin and current_user.id != user.id %}
-        <a href="{{ url_for('users.delete_user', user_id=user.id) }}" class="btn btn-danger float-right">Delete User Account</a>
-    {% endif %}
-
     <div class="media ml-2">
         <img class="rounded-circle account-img"
             src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">

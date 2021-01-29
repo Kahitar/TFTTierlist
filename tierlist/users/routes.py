@@ -182,9 +182,6 @@ def profile(user_id, active_tierlist_id=None):
 
 @users.route('/reset_password', methods=["GET", "POST"])
 def reset_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
-
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
@@ -193,6 +190,14 @@ def reset_request():
         return redirect(url_for('users.login'))
     return render_template('reset_request.html', title='Reset Password', form=form)
 
+
+@users.route('/admin_reset_password/<int:user_id>')
+def admin_password_reset(user_id):
+    user = User.query.get_or_404(user_id)
+    token = user.get_reset_token()
+    flash(f"Reset Link for user {user}:", 'success')
+    flash(f"{url_for('users.reset_password', token=token, _external=True)}", 'success')
+    return redirect(url_for('main.search'))
 
 @users.route('/reset_password/<token>', methods=["GET", "POST"])
 def reset_password(token):

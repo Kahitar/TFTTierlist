@@ -38,7 +38,7 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', 'admin:{self.is_admin}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}', 'admin:{self.is_admin}')"
 
 
 class Tierlist(db.Model):

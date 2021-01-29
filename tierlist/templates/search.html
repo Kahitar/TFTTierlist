@@ -22,7 +22,7 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Admin</th>
-                    <th colspan="2" class="table-warning">Admin Controls (Be careful here!)</th>
+                    <th colspan="2" class="table-warning">Admin Controls ( Be super careful here! )</th>
                 </thead>
                 {% for user in users %}
                     <tr>
@@ -56,11 +56,34 @@
                             {% endif %}
                             {% if current_user.is_admin and user != current_user %}
                         <td>
-                                <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_login', user_id=user.id) }}">Admin Login</a>
+                            <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_password_reset', user_id=user.id) }}">Reset Password Token</a>
+                            <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_login', user_id=user.id) }}">Login</a>
+                            <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">Delete User Account</button>
                         </td>
                             {% else %}
                             {% endif %}
                     </tr>
+
+                    <!-- Modal to delete user account -->
+                    <div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteUserModalLabel">Delete User? </br>{{ user }} ?</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <form action="{{ url_for('users.delete_user', user_id=user.id) }}" method="POST">
+                                        <input class="btn btn-danger" type="submit" value="Delete">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endfor %}
             </table>
         {% else %}
