@@ -54,7 +54,7 @@
                                 <a class="btn btn-outline-danger btn-sm ml-2" href="{{ url_for('users.make_admin', user_id=user.id) }}">Make Admin</a>
                         </td>
                             {% endif %}
-                            {% if current_user.is_admin and user != current_user %}
+                            {% if current_user.is_admin and user != current_user and not user.is_admin %}
                         <td>
                             <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_password_reset', user_id=user.id) }}">Reset Password Token</a>
                             <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_login', user_id=user.id) }}">Login</a>
