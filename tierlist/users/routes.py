@@ -117,9 +117,9 @@ def login():
 def admin_login(user_id):
     user = User.query.get_or_404(user_id)
     if current_user.is_admin:
+        admin = user.is_admin
         login_user(user, remember=False)
-        next_page = request.args.get('next')
-        return redirect(next_page) if next_page else redirect(url_for('main.search'))
+        return redirect(url_for('main.admin')) if admin else redirect(url_for('main.home'))
 
 
 @users.route('/logout')
