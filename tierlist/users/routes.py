@@ -154,10 +154,10 @@ def account():
                            image_file=image_file, form=form)
 
 
-@users.route("/profile/<int:user_id>")
-@users.route("/profile/<int:user_id>/<int:active_tierlist_id>")
-def profile(user_id, active_tierlist_id=None):
-    user = User.query.get_or_404(user_id)
+@users.route("/p/<string:username>")
+@users.route("/p/<string:username>/<int:active_tierlist_id>")
+def profile(username, active_tierlist_id=None):
+    user = User.query.filter_by(username=username).one()
     tierlists, comps = get_users_tierlists([user])
     image_file = url_for(
         'static', filename='profile_pics/' + user.image_file)

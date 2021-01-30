@@ -14,10 +14,10 @@ main = Blueprint('main', __name__)
 def home(active_tierlist_id=None):
     home_user = User.query.filter_by(username="Sologesang").first()
     if home_user:
-        user_id = home_user.id
+        username = home_user.username
     else:
-        user_id = User.query.first().id
-    return redirect(url_for('users.profile', user_id=user_id))
+        username = User.query.first().username
+    return redirect(url_for('users.profile', username=username))
 
 
 @main.route("/search/<string:query>", methods=["GET", "POST"])

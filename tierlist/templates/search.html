@@ -27,7 +27,7 @@
                 {% for user in users %}
                     <tr>
                         <td>
-                            <a href="{{ url_for('users.profile', user_id=user.id) }}">{{ user.username }}</a>
+                            <a href="{{ url_for('users.profile', username=user.username) }}">{{ user.username }}</a>
                             {% if user == current_user %}
                             (You)
                             {% endif %}
@@ -92,7 +92,7 @@
             <ul class="list-group list-group-flush">
                 {% for user in users %}
                     <li class="list-group-item">
-                        <a href="{{ url_for('users.profile', user_id=user.id) }}">{{ user.username }}</a>
+                        <a href="{{ url_for('users.profile', username=user.username) }}">{{ user.username }}</a>
                         {% if user == current_user %}
                         (You)
                         {% endif %}
