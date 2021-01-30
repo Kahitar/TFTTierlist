@@ -51,8 +51,10 @@ def update_post(post_id):
             if post.image_file:
                 delete_picture(post.image_file)
             # Save new picture
-            picture_file = save_picture(form.picture.data)
-            post.image_file = picture_file
+            post.image_file = save_picture(form.picture.data)
+        elif form.delete_pic:
+            delete_picture(post.image_file)
+            post.image_file = None
         db.session.commit()
         flash("Your post has been updated!", "success")
         return redirect(url_for("posts.post", post_id=post.id))
@@ -60,9 +62,12 @@ def update_post(post_id):
         form.title.data = post.title
         form.content.data = post.content
         if post.image_file:
+            image = post.image_file
             form.picture.data = post.image_file
+        else:
+            image = None
     return render_template('create_post.html', title='Update Post',
-                           form=form, legend="Update Post")
+                           form=form, legend="Update Post", image=image)
 
 
 @posts.route("/post/<int:post_id>/delete", methods=["POST"])

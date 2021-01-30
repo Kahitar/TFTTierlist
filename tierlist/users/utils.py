@@ -21,7 +21,7 @@ def get_users_tierlists(users, only_public=True):
     return (tierlists, all_comps)
 
 def get_users_posts(users):
-    posts_nested = [Post.query.filter_by(author=user).all() for user in users] # This is not very efficient, but there should only ever be a few admins.
+    posts_nested = [Post.query.filter_by(author=user).all() for user in users] # This is not very efficient with a lot of users.
     posts = [t_list for l in posts_nested for t_list in l]
 
     return posts
