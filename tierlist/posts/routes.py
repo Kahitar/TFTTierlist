@@ -52,7 +52,7 @@ def update_post(post_id):
                 delete_picture(post.image_file)
             # Save new picture
             post.image_file = save_picture(form.picture.data)
-        elif form.delete_pic:
+        elif form.delete_pic.data:
             delete_picture(post.image_file)
             post.image_file = None
         db.session.commit()
