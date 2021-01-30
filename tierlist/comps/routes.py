@@ -35,7 +35,7 @@ def new_comp(tierlist_id):
 @login_required
 def update_comp(comp_id):
     comp = Comp.query.get_or_404(comp_id)
-    if not current_user.is_admin:
+    if current_user != comp.tierlist.author:
         abort(403)
 
     form = CompForm()
