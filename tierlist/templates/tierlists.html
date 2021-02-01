@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block content_fluid %}
     <h1>Your Tierlists</h1>
     {% if tierlists|length > 0 %}
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -39,4 +39,4 @@
         <a class="btn btn-outline-info" id="add-list-tab" href="{{ url_for('tierlists.new_tierlist') }}" role="tab">Add Tierlist</a>
     {% endif %}
 
-{% endblock content %}
+{% endblock content_fluid %}

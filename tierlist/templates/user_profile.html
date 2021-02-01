@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block content_fluid %}
     <div class="media ml-2">
         <img class="rounded-circle account-img"
             src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
@@ -65,4 +65,4 @@
         {% include "all_posts.html" %}
     {% endif %}
 
-{% endblock content %}
+{% endblock content_fluid %}

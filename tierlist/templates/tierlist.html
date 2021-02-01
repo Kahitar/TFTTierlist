@@ -1,6 +1,6 @@
 {% set max_tier = 5 %}
 
-<div class="container">
+<div class="container-fluid">
     {% if current_user.is_authenticated and current_user == tierlist.author %}
         <div class="float-left mt-2 mb-2 mr-2">
             <a class="btn btn-sm btn-outline-info" href="{{ url_for('comps.new_comp', tierlist_id=tierlist.id) }}">Add Comp</a>

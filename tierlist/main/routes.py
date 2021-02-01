@@ -34,15 +34,19 @@ def search(query=None):
     search_form = SearchForm()
     if search_form.validate_on_submit():
         search_term = search_form.query.data
-        if search_term == "":
-            users = User.query.all()
+        if search_term:
+            users = User.query.filter(User.username.contains(search_term)).all()
+            if len(users) == 1:
+                return redirect(url_for('users.profile', username=users[0].username))
         else:
-            users = User.query.filter(User.username.contains(search_term))
+            users = User.query.all()
         return render_template('search_result.html', search_form=search_form, users=users)
 
     if query:
         search_form.query.data = query
         users = User.query.filter(User.username.contains(query)).all()
+        if len(users) == 1:
+            return redirect(url_for('users.profile', username=users[0].username))
     else:
         users = User.query.all()
     return render_template('search_result.html', search_form=search_form, users=users)

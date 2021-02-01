@@ -1,17 +1,15 @@
 {% extends "layout.html" %}
 {% block content%}
     <form method="POST" action="" enctype="multipart/form-data" class="form-inline">
-        <div class="form-group mb-2">
+        <div class="form-inline mb-2">
         {{ search_form.hidden_tag() }} <!-- FlaskForm.hidden_tag() uses the app's secret key to protect from attacks. Absolutely necessary! -->
+        {{ search_form.query(class="form-control mr-sm-2", type="search", placeholder="Search Username") }}
         {% if search_form.query.errors %}
-            {{ search_form.query(class="form-control mr-sm-2") }}
             <div class="invalid-feedback">
                 {% for error in search_form.query.errors %}
                     <span>{{ error }}</span>
                 {% endfor %}
             </div>
-        {% else %}
-            {{ search_form.query(class="form-control mr-sm-2") }}
         {% endif %}
             {{ search_form.submit(class="btn btn-outline-info") }}
         </div>
