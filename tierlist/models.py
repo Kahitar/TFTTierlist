@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
                            default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
+    last_login = db.Column(db.DateTime, nullable=True)
 
     # One-to-many relationships
     tierlists = db.relationship('Tierlist', backref='author', lazy=True)

@@ -88,6 +88,19 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
+/* Make columns the exact size needed for content */
+table.table-fit {
+  width: auto !important;
+  table-layout: auto !important;
+}
+table.table-fit thead th, table.table-fit tfoot th {
+  width: auto !important;
+}
+table.table-fit tbody td, table.table-fit tfoot td {
+  width: auto !important;
+}
+
+/* Tierlist tier color */
 .table tbody tr > td.tier-1 {
   background-color: #6AA84F !important;
 }

@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from tierlist import db, bcrypt
@@ -67,7 +68,7 @@ def make_admin(user_id):
         user.is_admin = True
         db.session.commit()
         flash(f"Made user admin: {user}", "success")
-        return redirect(url_for('main.search'))
+        return redirect(url_for('main.admin'))
     else:
         flash("You don't have the permission to do that...", "danger")
         return redirect(url_for('main.search'))
@@ -77,15 +78,17 @@ def make_admin(user_id):
 @login_required
 def revoke_admin(user_id):
     user = User.query.get_or_404(user_id)
-    if current_user.is_admin and current_user != user:
-        user.is_admin = False
-        db.session.commit()
-        flash(f"Revoked admin for user: {user}", "success")
-    elif current_user == user:
-        flash(f"Cannot revoke admin rights for your own account.", "danger")
+    if current_user.is_admin:
+        if current_user != user:
+            user.is_admin = False
+            db.session.commit()
+            flash(f"Revoked admin for user: {user}", "success")
+        else:
+            flash(f"Cannot revoke admin rights for your own account.", "danger")
+        return redirect(url_for('main.admin'))
     else:
         flash("You don't have the permission to do that...", "danger")
-    return redirect(url_for('main.search'))
+        return redirect(url_for('main.search'))
 
 
 @users.route('/login', methods=["GET", "POST"])
@@ -105,6 +108,8 @@ def login():
                 password_match = False
             if password_match:
                 login_user(user, remember=form.remember.data)
+                user.last_login = datetime.now()
+                db.session.commit()
                 next_page = request.args.get('next')
                 return redirect(next_page) if next_page else redirect(url_for('main.home'))
 
@@ -197,7 +202,7 @@ def admin_password_reset(user_id):
     token = user.get_reset_token()
     flash(f"Reset Link for user {user}:", 'success')
     flash(f"{url_for('users.reset_password', token=token, _external=True)}", 'success')
-    return redirect(url_for('main.search'))
+    return redirect(url_for('main.admin'))
 
 
 @users.route('/reset_password/<token>', methods=["GET", "POST"])

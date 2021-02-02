@@ -25,8 +25,9 @@
             <thead>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Last Login</th>
                 <th>Admin</th>
-                <th colspan="2" class="table-warning">Admin Controls ( Be super careful here! )</th>
+                <th colspan="3" class="table-warning">Admin Controls ( Be super careful here! )</th>
             </thead>
             {% for user in users %}
                 <tr>
@@ -38,6 +39,13 @@
                     </td>
                     <td>
                         {{user.email }}
+                    </td>
+                    <td>
+                        {% if user.last_login %}
+                            {{ user.last_login.strftime('%d.%m.%Y %H:%M') }}
+                        {% else %}
+                            {{ None }}
+                        {% endif %}
                     </td>
                     <td>
                         {% if user.is_admin %}
@@ -58,15 +66,20 @@
                             <a class="btn btn-outline-danger btn-sm ml-2" href="{{ url_for('users.make_admin', user_id=user.id) }}">Make Admin</a>
                     </td>
                         {% endif %}
-                        {% if current_user.is_admin and user != current_user %}
+                        {% if user != current_user %}
                     <td>
-                        <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_login', user_id=user.id) }}">Login</a>
-                        {% if not user.is_admin %}
+                            <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_login', user_id=user.id) }}">Login</a>
                             <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_password_reset', user_id=user.id) }}">Reset Password Token</a>
-                            <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">Delete User Account</button>
-                        {% endif %}
                     </td>
+                            {% if not user.is_admin %}
+                    <td>
+                                <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">Delete User Account</button>
+                    </td>
+                            {% endif %}
                         {% else %}
+                    <td>
+                            <a class="btn btn-outline-info btn-sm ml-2" href="{{ url_for('users.admin_password_reset', user_id=user.id) }}">Reset Password Token</a>
+                    </td>
                         {% endif %}
                 </tr>
 
