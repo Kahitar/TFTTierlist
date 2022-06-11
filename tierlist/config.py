@@ -1,4 +1,4 @@
-
+import os
 
 class Config:
 	# TODO (for production): Move all secret variables to environment variables: os.environ.get('EMAIL_USER')
@@ -7,5 +7,5 @@ class Config:
 	MAIL_SERVER = 'mail.gmx.net'
 	MAIL_PORT = 587
 	MAIL_USE_TLS = True
-	MAIL_USERNAME = 'weight-assist@gmx.de'
-	MAIL_PASSWORD = 'aKiR2TLMfKR9BDB' 
+	MAIL_USERNAME = os.environ.get('TFTIERLIST_MAIL_USERNAME') # 'weight-assist@gmx.de'
+	MAIL_PASSWORD = os.environ.get('TFTIERLIST_MAIL_PASSWORD')
