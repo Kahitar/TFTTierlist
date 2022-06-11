@@ -3,6 +3,12 @@ from tierlist import db
 from tierlist.models import Tierlist, Comp
 
 
+def delete_all_comps(tierlist: Tierlist):
+    for comp in tierlist.comps:
+        db.session.delete(comp)
+    db.session.commit()
+
+
 def update_tierlist(tierlist):
     fix_subtier_gaps(tierlist)
     tierlist.last_updated = datetime.now()
