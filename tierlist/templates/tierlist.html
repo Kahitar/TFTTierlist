@@ -19,7 +19,6 @@
             <th style="width: 50px">RANKING</th>
             <th>CARRIES</th>
             <th>SYNERGIES</th>
-            <th>CHOSEN</th>
             <th>ITEMS & POSITIONING</th>
             {% if current_user.is_authenticated and current_user == tierlist.author %}
                 <th class="text-center" colspan="2">Tier Up/Down</th>
@@ -36,7 +35,6 @@
                 {% endif %}
                 <td class="ml-2">{{ comp.carries }}</td>
                 <td class="ml-2">{{ comp.synergies }}</td>
-                <td class="ml-2">{{ comp.chosen }}</td>
                 <td class="ml-2">{{ comp.lolchess|urlize(20, true, target="_blank") }}</td>
 
                 {% if current_user.is_authenticated and current_user == tierlist.author %}
