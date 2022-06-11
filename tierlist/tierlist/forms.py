@@ -5,6 +5,6 @@ from wtforms.validators import DataRequired, Length
 
 class TierlistPropertiesForm(FlaskForm):
     name = StringField('Name', validators=[
-                       DataRequired(), Length(min=1, max=20)])
+                       DataRequired(), Length(min=1, max=100)])
     is_public = BooleanField('Public')
     submit = SubmitField('Save')
