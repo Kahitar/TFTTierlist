@@ -162,7 +162,11 @@ def account():
 @users.route("/p/<string:username>")
 @users.route("/p/<string:username>/<int:active_tierlist_id>")
 def profile(username, active_tierlist_id=None):
-    user = User.query.filter_by(username=username).one()
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash(f'The user "{username}" does not exist.', 'danger')
+        return redirect(url_for("main.home"))
+
     tierlists, comps = get_users_tierlists([user])
     image_file = url_for(
         'static', filename='profile_pics/' + user.image_file)
