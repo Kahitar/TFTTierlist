@@ -21,9 +21,9 @@
             <th>SYNERGIES</th>
             <th>ITEMS & POSITIONING</th>
             {% if current_user.is_authenticated and current_user == tierlist.author %}
-                <th class="text-center" colspan="2">Tier Up/Down</th>
                 <th class="text-center" colspan="2">Row Up/Down</th>
-                <th>Comp</th>
+                <th class="text-center" colspan="2">Tier Up/Down</th>
+                <th>Actions</th>
             {% endif %}
         </tr>
     	{% for comp in comps %}
@@ -39,20 +39,6 @@
 
                 {% if current_user.is_authenticated and current_user == tierlist.author %}
                     <td>
-                        {% if comp.tier > 1 or comp.sub_tier > 1 %}
-                            <a class="btn btn-info btn-sm float-right" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-up') }}">
-                                <img src="{{ url_for('static', filename='arrow-up-tier.ico') }}" alt="Tier up" class="">
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if comp.tier < (max_tier+1) %}
-                            <a class="btn btn-info btn-sm" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-down') }}">
-                                <img src="{{ url_for('static', filename='arrow-down-tier.ico') }}" alt="Tier down" class="">
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
                         {% if (comp.tier > 1 or comp.sub_tier > 1) and comp.tier < (max_tier+1) %}
                             <a class="btn btn-info btn-sm float-right" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='up') }}">
                                 <img src="{{ url_for('static', filename='arrow-up-sub-tier.ico') }}" alt="Sub Tier up" class="">
@@ -63,6 +49,20 @@
                         {% if comp != comps[-1] and comp.tier < (max_tier+1) %}
                             <a class="btn btn-info btn-sm" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='down') }}">
                                 <img src="{{ url_for('static', filename='arrow-down-sub-tier.ico') }}" alt="Sub Tier down" class="">
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if comp.tier > 1 or comp.sub_tier > 1 %}
+                            <a class="btn btn-info btn-sm float-right" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-up') }}">
+                                <img src="{{ url_for('static', filename='arrow-up-tier.ico') }}" alt="Tier up" class="">
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if comp.tier < (max_tier+1) %}
+                            <a class="btn btn-info btn-sm" href="{{ url_for('comps.move_comp', comp_id=comp.id, direction='tier-down') }}">
+                                <img src="{{ url_for('static', filename='arrow-down-tier.ico') }}" alt="Tier down" class="">
                             </a>
                         {% endif %}
                     </td>
